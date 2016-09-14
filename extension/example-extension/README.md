@@ -7,10 +7,10 @@ The jar file can be compiled with intelliJ and the front end request (copy paste
 
 	var soapDoc = AjxSoapDoc.create("STCreatePersonas", "urn:ShareToolkit", null);
 	soapDoc.getMethod().setAttribute("type", "all");
-   soapDoc.getMethod().setAttribute("user", "test@domain.com");
+        soapDoc.getMethod().setAttribute("user", "test@domain.com");
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;
-    csfeParams.asyncMode = false;
+        csfeParams.asyncMode = false;
 	try {
 		var reqMgrParams = {} ;
         resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetCertResponse;
