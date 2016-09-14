@@ -1,4 +1,4 @@
-# Extension Template
+# Admin Extension Template
 
 Here is an example of an Admin extension it needs to be copied to : /opt/zimbra/lib/ext/ShareToolkit/ShareToolkit.jar
 
