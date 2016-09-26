@@ -26,15 +26,26 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapParseException;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
+import java.io.*;
+
 
 public class CreatePersonas extends DocumentHandler {
-
     public Element handle(Element request, Map<String, Object> context)
             throws ServiceException {
         try {
-            // Create response
-
             ZimbraSoapContext zsc = getZimbraSoapContext(context);
+
+            Runtime rt = Runtime.getRuntime();
+            Process pr = rt.exec("/opt/zimbra/bin/zmprov -l gaa");
+
+            BufferedReader cmdOutputBuffer = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+
+            StringBuilder builder = new StringBuilder();
+            String aux= "";
+            while ((aux = cmdOutputBuffer.readLine()) != null) {
+                builder.append(aux);
+            }
+            String cmdResult = builder.toString();
 
             Element response = zsc.createElement(
                     "CreatePersonasResponse"
@@ -42,6 +53,7 @@ public class CreatePersonas extends DocumentHandler {
             Element elStart = response.addUniqueElement("start");
             Element elEnd = response.addUniqueElement("end");
             elStart.setText(request.getAttribute("user"));
+            elEnd.setText(cmdResult);
             return response;
 
         } catch (
