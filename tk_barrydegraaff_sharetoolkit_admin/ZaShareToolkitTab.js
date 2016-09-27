@@ -94,7 +94,7 @@ ZaShareToolkitTab.prototype.btnCreateShare = function () {
     }   
     else
     {
-       console.log('invalid selection');
+       ZaShareToolkitTab.prototype.status('Select or type 2 different email addresses.');
     }
 }   
    
