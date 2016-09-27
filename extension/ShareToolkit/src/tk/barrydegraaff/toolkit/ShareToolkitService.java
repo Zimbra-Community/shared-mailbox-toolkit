@@ -29,6 +29,6 @@ public class ShareToolkitService implements DocumentService {
     public static final Namespace namespace = Namespace.get("urn:ShareToolkit");
 
     public void registerHandlers(DocumentDispatcher dispatcher) {
-        dispatcher.registerHandler(QName.get("STCreatePersonas",namespace), new CreatePersonas());
+        dispatcher.registerHandler(QName.get("ShareToolkit",namespace), new ShareToolkitSoapHandler());
     }
 }

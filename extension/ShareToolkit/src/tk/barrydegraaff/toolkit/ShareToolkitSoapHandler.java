@@ -20,48 +20,68 @@ package tk.barrydegraaff.toolkit;
 
 import java.util.Map;
 
-import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.SoapParseException;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 import java.io.*;
 
 
-public class CreatePersonas extends DocumentHandler {
+public class ShareToolkitSoapHandler extends DocumentHandler {
     public Element handle(Element request, Map<String, Object> context)
             throws ServiceException {
         try {
+
             ZimbraSoapContext zsc = getZimbraSoapContext(context);
-
-            Runtime rt = Runtime.getRuntime();
-            Process pr = rt.exec("/opt/zimbra/bin/zmprov -l gaa");
-
-            BufferedReader cmdOutputBuffer = new BufferedReader(new InputStreamReader(pr.getInputStream()));
-
-            StringBuilder builder = new StringBuilder();
-            String aux= "";
-            while ((aux = cmdOutputBuffer.readLine()) != null) {
-                builder.append(aux);
-            }
-            String cmdResult = builder.toString();
-
             Element response = zsc.createElement(
-                    "CreatePersonasResponse"
+                    "ShareToolkitResponse"
             );
-            Element elStart = response.addUniqueElement("start");
-            Element elEnd = response.addUniqueElement("end");
-            elStart.setText(request.getAttribute("user"));
-            elEnd.setText(cmdResult);
+
+            switch (request.getAttribute("action"))
+            {
+                case "getAccounts":
+
+                    Element users = response.addUniqueElement("users");
+                    users.setText(this.runCommand("/opt/zimbra/bin/zmprov -l gaa"));
+                    break;
+                case "createShare":
+                    Element createShareResult = response.addUniqueElement("createShareResult");
+                    createShareResult.setText(this.runCommand("/usr/local/sbin/subzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta")));
+                    break;
+            }
             return response;
 
         } catch (
                 Exception e)
 
         {
-            throw ServiceException.FAILURE("exception occurred handling command", e);
+            throw ServiceException.FAILURE("ShareToolkitSoapHandler ServiceException ", e);
         }
 
     }
+
+    private String runCommand(String cmd) throws ServiceException
+    {
+        try {
+            Runtime rt = Runtime.getRuntime();
+            Process pr = rt.exec(cmd);
+            BufferedReader cmdOutputBuffer = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+
+            StringBuilder builder = new StringBuilder();
+            String aux= "";
+            while ((aux = cmdOutputBuffer.readLine()) != null) {
+                builder.append(aux);
+                builder.append(';');
+            }
+            String cmdResult = builder.toString();
+            return cmdResult;
+
+        } catch (
+                Exception e)
+
+        {
+            throw ServiceException.FAILURE("ShareToolkitSoapHandler runCommand exception", e);
+        }
+    }
+
 }

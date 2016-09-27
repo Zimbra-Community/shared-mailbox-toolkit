@@ -24,24 +24,21 @@ ZaShareToolkitTab = function(parent, entry) {
     });
     this.setScrollStyle(Dwt.SCROLL);
 
-    document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = 'Running zmprov -l gad';
-    document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = 'Running zmprov -l gad';
+    var soapDoc = AjxSoapDoc.create("ShareToolkit", "urn:ShareToolkit", null);
+    soapDoc.getMethod().setAttribute("action", "getAccounts");
+    var csfeParams = new Object();
+    csfeParams.soapDoc = soapDoc;
+    csfeParams.asyncMode = true;
+    csfeParams.callback = new AjxCallback(ZaShareToolkitTab.prototype.getAccountsCallback);
+    var reqMgrParams = {} ;
+    resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 
-   var soapDoc = AjxSoapDoc.create("STCreatePersonas", "urn:ShareToolkit", null);
-      soapDoc.getMethod().setAttribute("type", "all");
-      soapDoc.getMethod().setAttribute("user", "test@domain.com");
-      var csfeParams = new Object();
-      csfeParams.soapDoc = soapDoc;
-      csfeParams.asyncMode = false;
-      try {
-          var reqMgrParams = {} ;
-          resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams);
-          document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = "All accounts on server<br> <textarea style=\"width:600px; height:400px\">" + JSON.stringify(resp) + "</textarea>";  
-     }catch (ex) {
-        document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = "Exception " + ex;  
-     }    
-       
+    document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = '<h1>Share Toolkit</h1><h2>Create share</h2>Share the account <input type="text" id="account-a" list="ShareToolkit-datalist" placeholder="user-a@domain.com">&nbsp;with:&nbsp;<input type="text" id="account-b" list="ShareToolkit-datalist" placeholder="user-b@domain.com"><datalist id="ShareToolkit-datalist"></datalist>&nbsp;&nbsp;<button id="btnCreateShare">OK</button><h2>Status</h2><div id="ShareToolkit-status" style="color:#aaaaaa; font-style: italic;"></div>';   
     
+    ZaShareToolkitTab.prototype.status('Loading auto completion...');
+    
+    var btnCreateShare = document.getElementById('btnCreateShare');
+    btnCreateShare.onclick = AjxCallback.simpleClosure(this.btnCreateShare);
 }
 
 
@@ -59,7 +56,52 @@ ZaShareToolkitTab.prototype.getTabTitle =
         return "Share Toolkit";
     }
 
-ZaShareToolkitTab.prototype.getTitle =
-    function () {
-        return tk_barrydegraaff_sharetoolkit_admin.Client_upload_title;
+ZaShareToolkitTab.prototype.getAccountsCallback = function (result) {
+   var dataList = document.getElementById('ShareToolkit-datalist');
+   var users = result._data.Body.ShareToolkitResponse.users._content.split(";");
+   
+   users.sort();
+   users.forEach(function(item) 
+   {
+      // Create a new <option> element.
+      var option = document.createElement('option');
+      // Set the value using the item in the JSON array.
+      option.value = item;
+      // Add the <option> element to the <datalist>.
+      dataList.appendChild(option);
+   });
+   ZaShareToolkitTab.prototype.status('Ready.');
+   return;
+}
+
+ZaShareToolkitTab.prototype.btnCreateShare = function () {
+    ZaShareToolkitTab.prototype.status('Creating share...');
+    var accountA = document.getElementById('account-a').value;
+    var accountB = document.getElementById('account-b').value;
+    
+    if(accountA && accountB && (accountA !== accountB))
+    {
+       var soapDoc = AjxSoapDoc.create("ShareToolkit", "urn:ShareToolkit", null);
+       soapDoc.getMethod().setAttribute("action", "createShare");
+       soapDoc.getMethod().setAttribute("accounta", accountA);
+       soapDoc.getMethod().setAttribute("accountb", accountB);
+       var csfeParams = new Object();
+       csfeParams.soapDoc = soapDoc;
+       csfeParams.asyncMode = true;
+       csfeParams.callback = new AjxCallback(ZaShareToolkitTab.prototype.createShareCallback);
+       var reqMgrParams = {} ;
+       resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams);
+    }   
+    else
+    {
+       console.log('invalid selection');
     }
+}   
+   
+ZaShareToolkitTab.prototype.createShareCallback = function (result) {
+   ZaShareToolkitTab.prototype.status('Ready.');
+}  
+
+ZaShareToolkitTab.prototype.status = function (statusText) {
+   document.getElementById('ShareToolkit-status').innerHTML = statusText;
+}
