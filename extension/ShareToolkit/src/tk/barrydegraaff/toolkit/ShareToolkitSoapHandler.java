@@ -24,6 +24,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.io.*;
 
 
@@ -46,7 +48,15 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
                     break;
                 case "createShare":
                     Element createShareResult = response.addUniqueElement("createShareResult");
-                    createShareResult.setText(this.runCommand("/usr/local/sbin/subzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta")));
+                    if((this.validate(request.getAttribute("accountb")))&&(this.validate(request.getAttribute("accounta"))))
+                    {
+                        this.runCommand("/usr/local/sbin/subzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta"));
+                        createShareResult.setText("");
+                    }
+                    else
+                    {
+                        createShareResult.setText("Invalid email address specified.");
+                    }
                     break;
             }
             return response;
@@ -58,6 +68,13 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
             throw ServiceException.FAILURE("ShareToolkitSoapHandler ServiceException ", e);
         }
 
+    }
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public static boolean validate(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        return matcher.find();
     }
 
     private String runCommand(String cmd) throws ServiceException

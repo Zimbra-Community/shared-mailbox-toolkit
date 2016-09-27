@@ -99,7 +99,7 @@ ZaShareToolkitTab.prototype.btnCreateShare = function () {
 }   
    
 ZaShareToolkitTab.prototype.createShareCallback = function (result) {
-   ZaShareToolkitTab.prototype.status('Ready.');
+   ZaShareToolkitTab.prototype.status('Ready. '+result._data.Body.ShareToolkitResponse.createShareResult._content);
 }  
 
 ZaShareToolkitTab.prototype.status = function (statusText) {
