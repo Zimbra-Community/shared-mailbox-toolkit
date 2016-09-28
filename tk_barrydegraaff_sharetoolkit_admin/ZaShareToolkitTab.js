@@ -33,7 +33,7 @@ ZaShareToolkitTab = function(parent, entry) {
     var reqMgrParams = {} ;
     resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 
-    document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = '<h1>Share Toolkit</h1><h2>Create share</h2>Share the account <input type="text" id="account-a" list="ShareToolkit-datalist" placeholder="user-a@domain.com">&nbsp;with:&nbsp;<input type="text" id="account-b" list="ShareToolkit-datalist" placeholder="user-b@domain.com"><datalist id="ShareToolkit-datalist"></datalist>&nbsp;&nbsp;<button id="btnCreateShare">OK</button><h2>Status</h2><div id="ShareToolkit-status" style="color:#aaaaaa; font-style: italic;"></div>';   
+    document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = '<div style="padding-left:10px"><h1>Share Toolkit</h1><h2>Create share</h2>Share the account <input type="text" id="account-a" list="ShareToolkit-datalist" placeholder="user-a@domain.com">&nbsp;with:&nbsp;<input type="text" id="account-b" list="ShareToolkit-datalist" placeholder="user-b@domain.com"><datalist id="ShareToolkit-datalist"></datalist>&nbsp;&nbsp;<button id="btnCreateShare">OK</button><h2>Status</h2><div id="ShareToolkit-status" style="color:#aaaaaa; font-style: italic;"></div></div>';   
     
     ZaShareToolkitTab.prototype.status('Loading auto completion...');
     
