@@ -33,12 +33,14 @@ ZaShareToolkitTab = function(parent, entry) {
     var reqMgrParams = {} ;
     resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 
-    document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = '<div style="padding-left:10px"><h1>Share Toolkit</h1><h2>Create share</h2>Share the account <input type="text" id="account-a" list="ShareToolkit-datalist" placeholder="user-a@domain.com">&nbsp;with:&nbsp;<input type="text" id="account-b" list="ShareToolkit-datalist" placeholder="user-b@domain.com"><datalist id="ShareToolkit-datalist"></datalist>&nbsp;&nbsp;<button id="btnCreateShare">OK</button><h2>Status</h2><div id="ShareToolkit-status" style="color:#aaaaaa; font-style: italic;"></div></div>';   
+    document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = '<div style="padding-left:10px"><h1>Share Toolkit</h1>' +
+    '<h2>Create and remove shares</h2>This option allows you to share an entire account with another account. Useful for department and team mailboxes.<br><br><select id="ShareToolkit-action" onchange="this.value==\'createShare\' ? document.getElementById(\'ShareToolkit-withfrom\').innerHTML = \'with\' : document.getElementById(\'ShareToolkit-withfrom\').innerHTML = \'from\'" ><option value="createShare">Share</option><option value="removeShare">Unshare</option></select> the account <input type="text" id="ShareToolkit-account-a" list="ShareToolkit-datalist" placeholder="user-a@domain.com">&nbsp;<span id="ShareToolkit-withfrom">with</span>:&nbsp;<input type="text" id="ShareToolkit-account-b" list="ShareToolkit-datalist" placeholder="user-b@domain.com"><datalist id="ShareToolkit-datalist"></datalist>&nbsp;&nbsp;<button id="ShareToolkit-btnCreateShare">OK</button>' +
+    '<h2>Status</h2><div id="ShareToolkit-status" style="color:#aaaaaa; font-style: italic;"></div></div>';   
     
     ZaShareToolkitTab.prototype.status('Loading auto completion...');
     
-    var btnCreateShare = document.getElementById('btnCreateShare');
-    btnCreateShare.onclick = AjxCallback.simpleClosure(this.btnCreateShare);
+    var btnCreateShare = document.getElementById('ShareToolkit-btnCreateShare');
+    btnCreateShare.onclick = AjxCallback.simpleClosure(this.btnCreateRemoveShare);
 }
 
 
@@ -74,15 +76,22 @@ ZaShareToolkitTab.prototype.getAccountsCallback = function (result) {
    return;
 }
 
-ZaShareToolkitTab.prototype.btnCreateShare = function () {
-    ZaShareToolkitTab.prototype.status('Creating share...');
-    var accountA = document.getElementById('account-a').value;
-    var accountB = document.getElementById('account-b').value;
+ZaShareToolkitTab.prototype.btnCreateRemoveShare = function () {
+    if(document.getElementById('ShareToolkit-action').value == 'createShare')
+    {
+       ZaShareToolkitTab.prototype.status('Creating share...');
+    }
+    else
+    {
+       ZaShareToolkitTab.prototype.status('Removing share...');
+    }   
+    var accountA = document.getElementById('ShareToolkit-account-a').value;
+    var accountB = document.getElementById('ShareToolkit-account-b').value;
     
     if(accountA && accountB && (accountA !== accountB))
     {
        var soapDoc = AjxSoapDoc.create("ShareToolkit", "urn:ShareToolkit", null);
-       soapDoc.getMethod().setAttribute("action", "createShare");
+       soapDoc.getMethod().setAttribute("action", document.getElementById('ShareToolkit-action').value);
        soapDoc.getMethod().setAttribute("accounta", accountA);
        soapDoc.getMethod().setAttribute("accountb", accountB);
        var csfeParams = new Object();

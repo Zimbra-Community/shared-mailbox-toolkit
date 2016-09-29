@@ -46,11 +46,19 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
                     Element users = response.addUniqueElement("users");
                     users.setText(this.runCommand("/opt/zimbra/bin/zmprov -l gaa"));
                     break;
-                case "createShare":
+                case "createShare": case "removeShare":
                     Element createShareResult = response.addUniqueElement("createShareResult");
                     if((this.validate(request.getAttribute("accountb")))&&(this.validate(request.getAttribute("accounta"))))
                     {
-                        this.runCommand("/usr/local/sbin/subzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta"));
+                        if(request.getAttribute("action").equals("createShare"))
+                        {
+                           this.runCommand("/usr/local/sbin/subzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta"));
+                        }
+                        else if(request.getAttribute("action").equals("removeShare"))
+                        {
+                            this.runCommand("/usr/local/sbin/unsubzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta"));
+                        }
+
                         createShareResult.setText("");
                     }
                     else
