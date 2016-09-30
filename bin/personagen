@@ -1,0 +1,26 @@
+#!/bin/bash
+
+WHO=`whoami`
+if [ $WHO != "zimbra" ]
+then
+echo
+echo "Execute this scipt as user zimbra (\"su - zimbra\")"
+echo
+exit 1
+fi
+
+PARAMS=1
+if [ $# -ne "$PARAMS" ]
+then
+echo
+echo "personagen <account>"
+echo
+exit 1
+fi
+
+for i in $( /opt/zimbra/bin/zmprov ga $1 zimbraMailAlias | /usr/bin/grep zimbraMailAlias | /usr/bin/awk '{print $2}'  ); do
+   PERSONA="${i%@*}.persona"
+   /opt/zimbra/bin/zmprov createIdentity $1 $PERSONA zimbraPrefFromAddress $i zimbraPrefWhenSentToAddresses $i zimbraPrefWhenSentToEnabled TRUE
+done
+exit 0
+
