@@ -38,16 +38,14 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
             Element response = zsc.createElement(
                     "ShareToolkitResponse"
             );
+            Element shareToolkitResult = response.addUniqueElement("shareToolkitResult");
 
             switch (request.getAttribute("action"))
             {
                 case "getAccounts":
-
-                    Element users = response.addUniqueElement("users");
-                    users.setText(this.runCommand("/opt/zimbra/bin/zmprov -l gaa"));
+                    shareToolkitResult.setText(this.runCommand("/opt/zimbra/bin/zmprov -l gaa"));
                     break;
                 case "createShare": case "removeShare":
-                    Element createShareResult = response.addUniqueElement("createShareResult");
                     if((this.validate(request.getAttribute("accountb")))&&(this.validate(request.getAttribute("accounta"))))
                     {
                         if(request.getAttribute("action").equals("createShare"))
@@ -59,12 +57,22 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
                             this.runCommand("/usr/local/sbin/unsubzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta"));
                         }
 
-                        createShareResult.setText("");
+                        shareToolkitResult.setText("");
                     }
                     else
                     {
-                        createShareResult.setText("Invalid email address specified.");
+                        shareToolkitResult.setText("Invalid email address specified.");
                     }
+                case "createPersonas":
+                if(this.validate(request.getAttribute("accounta")))
+                {
+                    this.runCommand("/usr/local/sbin/personagen " + request.getAttribute("accounta"));
+                    shareToolkitResult.setText("");
+                }
+                else
+                {
+                    shareToolkitResult.setText("Invalid email address specified.");
+                }
                     break;
             }
             return response;
