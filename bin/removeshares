@@ -1,0 +1,35 @@
+#!/bin/bash
+
+WHO=`whoami`
+if [ $WHO != "zimbra" ]
+then
+echo
+echo "Execute this scipt as user zimbra (\"su - zimbra\")"
+echo
+exit 1
+fi
+
+PARAMS=1
+if [ $# -ne "$PARAMS" ]
+then
+echo
+echo "removeshares <account>"
+echo
+exit 1
+fi
+
+# One can use this for managing people going into a different department, or in case the web UI fail to load due to sharing bugs
+
+for i in $( /opt/zimbra/bin/zmmailbox -z -m admin@myzimbra.com gaf | /usr/bin/grep : | /usr/bin/awk -F "(" '{print $2}' | /usr/bin/awk -F ":" '{print $1}' ); do
+   #echo "$1 has accepted share(s) from or has mount points to" $i ":"
+
+   for f in $( /opt/zimbra/bin/zmprov ga $i zimbraSharedItem | /usr/bin/grep granteeName:$1 | /usr/bin/awk -F "folderPath:" '{print $2}'  | /usr/bin/awk -F ";" '{print $1}' ); do
+      echo "/opt/zimbra/bin/zmmailbox -z -m $i mfg \"$f\" account $1 none" >> /tmp/removeshares.log
+      echo "/opt/zimbra/bin/zmmailbox -z -m $i mfg \"$f\" account $1 none"
+      /opt/zimbra/bin/zmmailbox -z -m $i mfg "$f" account $1 none
+   done
+done
+exit 0
+
+# to-do remove personas: zmprov gid admin@myzimbra.com
+# to-do find a way to find sendAs rights for this user and revoke them
