@@ -18,8 +18,8 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 ZaShareToolkitController = function(appCtxt, container) {
     ZaXFormViewController.call(this, appCtxt, container, "ZaShareToolkitController");
     this._UICreated = false;
-    this._helpURL = "https://github.com/Zimbra-Community";
     this.tabConstructor = ZaShareToolkitTab;
+    this._appbarOperation = ''; //remove save, close and help buttons
 }
 
 ZaShareToolkitController.prototype = new ZaXFormViewController();

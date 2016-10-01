@@ -24,11 +24,6 @@ if(appNewUI && ZaSettings){
     ZaShareToolkit.prototype = new ZaItem;
     ZaShareToolkit.prototype.constructor = ZaShareToolkit;
 
-    ZaItem.loadMethods["ZaShareToolkit"] = new Array();
-    ZaItem.modifyMethods["ZaShareToolkit"] = new Array();
-    ZaItem.initMethods["ZaShareToolkit"] = new Array();
-
-    ZaOperation.SHARE_TOOLKIT = ++ZA_OP_INDEX;
     ZaZimbraAdmin._SHARE_TOOLKIT_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
     ZaApp.prototype.getShareToolkitViewController =
@@ -39,12 +34,12 @@ if(appNewUI && ZaSettings){
         }
 
     ZaShareToolkit.TreeListener = function (ev) {
-        var clientUploader = new ZaShareToolkit();
+        var shareToolkit = new ZaShareToolkit();
 
         if(ZaApp.getInstance().getCurrentController()) {
-            ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getShareToolkitViewController(),ZaShareToolkitController.prototype.show, [clientUploader]);
+            ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getShareToolkitViewController(),ZaShareToolkitController.prototype.show, [shareToolkit]);
         } else {
-            ZaApp.getInstance().getShareToolkitViewController().show(clientUploader);
+            ZaApp.getInstance().getShareToolkitViewController().show(shareToolkit);
         }
     }
 

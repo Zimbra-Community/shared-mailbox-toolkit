@@ -52,7 +52,6 @@ ZaShareToolkitTab = function(parent, entry) {
 
 ZaShareToolkitTab.prototype = new ZaTabView();
 ZaShareToolkitTab.prototype.constructor = ZaShareToolkitTab;
-//ZaTabView.XFormModifiers["ZaShareToolkitTab"] = new Array();
 
 ZaShareToolkitTab.prototype.getTabIcon =
     function () {
