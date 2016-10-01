@@ -19,14 +19,14 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 package tk.barrydegraaff.toolkit;
 
 import java.util.Map;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 
 public class ShareToolkitSoapHandler extends DocumentHandler {

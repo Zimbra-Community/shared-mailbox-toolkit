@@ -18,22 +18,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 */
 package tk.barrydegraaff.toolkit;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.StringUtil;
-import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.soap.SoapServlet;
 

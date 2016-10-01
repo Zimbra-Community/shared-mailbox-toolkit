@@ -18,7 +18,6 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 */
 package tk.barrydegraaff.toolkit;
 
-import com.zimbra.common.soap.CertMgrConstants;
 import com.zimbra.soap.DocumentDispatcher;
 import com.zimbra.soap.DocumentService;
 import org.dom4j.Namespace;
