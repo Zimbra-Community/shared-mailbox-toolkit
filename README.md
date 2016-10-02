@@ -35,7 +35,7 @@ Use the automated installer:
 ========================================================================
 
 ### Screenshot of Admin Zimlet and extension
-No need to have CLI access to create/revoke shares.
+No need to have CLI access to create/revoke root shares.
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/admin-zimlet.png)
 
 ### Screenshot of Client Zimlet
@@ -48,6 +48,13 @@ An additional header is added to the email to identify the user sending email fr
 
 ### Screenshot of the installer
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/installer.png)
+
+### CLI Commands
+Installed in /usr/local/sbin an can be run as user `zimbra`:
+* subzim: Share an entire mailbox with another mailbox (root share).
+* unsubzim: Revoke share created by subzim command (revoke root share).
+* personagen: Generate personas/identities for all aliasses of an account.
+* removeshares: Revoke all shares from an account. One can use this for managing people going into a different department, or in case the web UI fail to load due to sharing bugs.
 
 ### License
 
