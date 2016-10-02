@@ -37,6 +37,9 @@ Use the automated installer:
 ### Screenshot of Admin Zimlet and extension
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/admin-zimlet.png)
 
+### Screenshot of Client Zimlet
+![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/client-zimlet.png)
+
 ### Screenshot of the installer
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/installer.png)
 
