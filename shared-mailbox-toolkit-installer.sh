@@ -120,3 +120,4 @@ then
    echo "su - zimbra -c \"zmmailboxdctl restart\""
 fi
 
+rm -Rf $TMPFOLDER
