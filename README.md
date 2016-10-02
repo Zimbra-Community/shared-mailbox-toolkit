@@ -8,7 +8,7 @@ If you find Zimbra Shared Mailbox Toolkit useful and want to support its continu
 Demo video: https://youtu.be/8dzVqPENaBk
 
 Do you have generic mailboxes for you sales department, helpdesk or info@yourcompany.com, use Zimbra Shared Mailbox Toolkit to 
-share those mailboxes with your staff. For long time Zimbra, this toolkit is meant to fill the `family-mailbox` gap in 
+share those mailboxes with your staff. For long time Zimbra users: this toolkit is meant implement family mailboxes for 
 Zimbra 8.
 
 Designed for Zimbra version 8.7.
@@ -33,6 +33,9 @@ Use the automated installer:
 
 
 ========================================================================
+
+### Screenshot of Admin Zimlet and extension
+![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/admin-zimlet.png)
 
 ### License
 
