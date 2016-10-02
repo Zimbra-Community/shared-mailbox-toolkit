@@ -30,7 +30,7 @@ PARAMS=1
 if [ $# -ne "$PARAMS" ]
 then
 echo "Revoke all shares from an account."
-echo "One can use this for managing people going into a different department, or in case the web UI fail to load due to sharing bugs."
+echo "One can use this for managing people going into a different department, or in case the web UI fails to load due to sharing bugs."
 echo "removeshares <account>"
 echo
 exit 1
