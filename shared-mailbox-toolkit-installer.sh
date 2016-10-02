@@ -17,14 +17,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see http://www.gnu.org/licenses/.
 
-echo "This is a provisional installer for development purpose only, do not use in production"
+set -e
+# if you want to trace your script uncomment the following line
+#set -x
 
-echo "Hit enter, if you want to continue running this script, or CTRL+C  to abort";
-read dum;
+echo "Shared Mailbox Toolkit installer"
+
+# Make sure only root can run our script
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
 
 if [ -z "$1"  ]
 then
-   one=$(whiptail --title "Share Toolkit Installer" --checklist "Choose components to install. CLI commands are always installed." 15 60 4 \
+   one=$(whiptail --title "Shared Mailbox Toolkit Installer" --checklist "Choose components to install. CLI commands are always installed." 15 60 4 \
    "Client Zimlet" "" on \
    "Admin Zimlet and extension" "" on \
    "X-Authenticated-User header" "" on --clear 3>&1 1>&2 2>&3)
@@ -36,6 +43,27 @@ then
    #Change bash script parameter, aka one cannot do something like 1=$(whiptail....) to set $1
    set -- "$one" "$2"
 fi
+
+echo "Check if git installed."
+set +e
+YUM_CMD=$(which yum)
+APT_CMD=$(which apt-get)
+GIT_CMD=$(which git)
+set -e 
+
+if [[ -z $GIT_CMD ]]; then
+   if [[ ! -z $YUM_CMD ]]; then
+      yum install -y git
+   else
+      apt-get install -y git
+   fi
+fi
+
+TMPFOLDER="$(mktemp -d /tmp/shared-mailbox-toolkit-installer.XXXXXXXX)"
+echo "Download Shared Mailbox Toolkit to $TMPFOLDER"
+cd $TMPFOLDER
+git clone https://github.com/Zimbra-Community/shared-mailbox-toolkit
+cd shared-mailbox-toolkit
 
 if [[ $1 == *"Client Zimlet"* ]]
 then
@@ -70,14 +98,25 @@ fi
 echo "Deploy CLI tools"
 cp -rv bin/* /usr/local/sbin/
 
-echo "Installation completed"
+
+echo "Flushing Zimlet Cache"
+su - zimbra -c "zmprov fc all"
+
+echo "--------------------------------------------------------------------------------------------------------------
+Shared Mailbox Toolkit installed successful"
+
+if [[ $1 == *"X-Authenticated-User header"* ]] || [[ $1 == *"Admin Zimlet and extension"* ]];
+then
+echo "You still need to restart some services to load the changes:"
+fi
+
 if [[ $1 == *"X-Authenticated-User header"* ]]
 then
-   echo -e "# To enable X-Authenticated-User header run: \nsu - zimbra -c \"zmmtactl restart\""
+   echo "su - zimbra -c \"zmmtactl restart\""
 fi
 
 if [[ $1 == *"Admin Zimlet and extension"* ]]
 then
-   echo -e "# To enable admin extension run : \nsu - zimbra -c \"zmmailboxdctl restart\""
+   echo "su - zimbra -c \"zmmailboxdctl restart\""
 fi
 
