@@ -29,7 +29,7 @@ fi
 PARAMS=1
 if [ $# -ne "$PARAMS" ]
 then
-echo
+echo "Generate personas/identities for all aliasses of an account."
 echo "personagen <account>"
 echo
 exit 1

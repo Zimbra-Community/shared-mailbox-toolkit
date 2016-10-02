@@ -29,7 +29,7 @@ fi
 PARAMS=2
 if [ $# -ne "$PARAMS" ]
 then
-echo
+echo "Share an entire mailbox with another mailbox (root share)."
 echo "subzim <primary account needing access to> <this secondary account>"
 echo
 exit 1

@@ -29,7 +29,7 @@ fi
 PARAMS=2
 if [ $# -ne "$PARAMS" ]
 then
-echo
+echo "Revoke share created by subzim command (revoke root share)."
 echo "unsubzim <primary account remove access to> <this secondary account>"
 echo
 exit 1
