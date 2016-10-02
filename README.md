@@ -35,10 +35,16 @@ Use the automated installer:
 ========================================================================
 
 ### Screenshot of Admin Zimlet and extension
+No need to have CLI access to create/revoke shares.
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/admin-zimlet.png)
 
 ### Screenshot of Client Zimlet
+The client Zimlet will automatically expand the shared mailbox, so the Inbox is displayed instead of `No results found`.
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/client-zimlet.png)
+
+### Screenshot of additinal header
+An additional header is added to the email to identify the user sending email from a shared mailbox. For example it can help finding out what sales person was sending out mail from sales@myzimbra.com.
+![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/245ed7b8e4799004e81c4aa844bf6a0edf679f77/help/header.png)
 
 ### Screenshot of the installer
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/installer.png)
