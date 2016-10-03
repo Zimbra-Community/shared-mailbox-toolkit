@@ -40,6 +40,8 @@ No need to have CLI access to create/revoke root shares.
 ### Screenshot of Client Zimlet
 The client Zimlet will automatically expand the shared mailbox, so the Inbox is displayed instead of `No results found`.
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/client-zimlet.png)
+The client Zimlet will not show duplicated options when selecting FROM address.
+![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/from.png)
 
 ### Screenshot of additional header
 An additional header is added to the email to identify the user sending email from a shared mailbox. For example it can help finding out what sales person was sending out mail from sales@myzimbra.com. The header can be set via the installer or running `   su - zimbra -c "zmprov mcf zimbraSmtpSendAddAuthenticatedUser TRUE"` and `u - zimbra -c "zmmtactl restart"`.
