@@ -58,7 +58,7 @@ Installed in /usr/local/sbin an can be run as user `zimbra`:
 
 ### License
 
-Copyright (C) 2015-2016  Barry de Graaff [Zeta Alliance](http://www.zetalliance.org/)
+Copyright (C) 2015-2016  Barry de Graaff [Zeta Alliance](http://www.zetalliance.org/) and the _addSendAsOrSendOboAddresses patch by Michele [Olivo ZeXtras](https://www.zextras.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

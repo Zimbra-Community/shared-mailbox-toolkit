@@ -153,3 +153,34 @@ ZmFolderTreeController.prototype._itemClicked = function(folder, openInTab) {
 		sc.search(params);
 	}
 };
+
+
+
+ /* _addSendAsOrSendOboAddresses by Michele Olivo ZeXtras
+  * If a user has configured a persona and has sendAs rights for mailbox@example.com, using
+  * this patch, Zimbra will only display the persona in the FROM drop-down in the compose view.
+  * If the user has no persona, Zimbra will display the value derived from sendAs.
+  * The default behavior is to display all (and this clutters the FROM options list with dupes).
+ * */
+ZmComposeView.prototype._addSendAsOrSendOboAddresses  =
+function(menu, emails, isObo, displayValueFunc) {
+  var identities = appCtxt.getIdentityCollection().getIdentities(true),
+    identityMap = {};
+
+  for (var j = 0; j < identities.length; j += 1) {
+    identityMap[identities[j].getField("SEND_FROM_ADDRESS")] = identities[j];
+  }
+
+  for (var i = 0; i < emails.length; i++) {
+    var email = emails[i],
+      addr = email.addr,
+      displayValue = displayValueFunc(addr, email.displayName),
+      extraData = {isDL: email.isDL, isObo: isObo},
+      optData = new DwtSelectOptionData(addr, displayValue, null, null, null, null, extraData);
+
+    if (identityMap.hasOwnProperty(addr)) {
+      continue; // Skip identity already added.
+    }
+    menu.addOption(optData);
+  }; 
+}
