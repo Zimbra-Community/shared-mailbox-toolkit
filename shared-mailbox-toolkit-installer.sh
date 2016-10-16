@@ -44,18 +44,19 @@ then
    set -- "$one" "$2"
 fi
 
-echo "Check if git installed."
+echo "Check if git and zip are installed."
 set +e
 YUM_CMD=$(which yum)
 APT_CMD=$(which apt-get)
 GIT_CMD=$(which git)
+ZIP_CMD=$(which zip)
 set -e 
 
-if [[ -z $GIT_CMD ]]; then
+if [[ -z $GIT_CMD ]] || [[ -z $ZIP_CMD ]]; then
    if [[ ! -z $YUM_CMD ]]; then
-      yum install -y git
+      yum install -y git zip
    else
-      apt-get install -y git
+      apt-get install -y git zip
    fi
 fi
 
