@@ -47,6 +47,7 @@ ShareToolkitClient.prototype.init = function() {
      * If the user has no persona, Zimbra will display the value derived from sendAs.
      * The default behavior is to display all (and this clutters the FROM options list with dupes).
     * */
+   AjxDispatcher.require(["Mail"]);
    ZmComposeView.prototype._addSendAsOrSendOboAddresses  =
    function(menu, emails, isObo, displayValueFunc) {
      var identities = appCtxt.getIdentityCollection().getIdentities(true),
