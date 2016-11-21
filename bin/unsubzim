@@ -46,3 +46,4 @@ PERSONA="${MAILBOX%@*}.persona"
 #/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER df /$MAILBOX
 /opt/zimbra/bin/zmprov rvr account $MAILBOX usr $SUBSCRIBER sendAs
 /opt/zimbra/bin/zmprov deleteIdentity $SUBSCRIBER $PERSONA
+/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER dofrl "$PERSONA.sent"
