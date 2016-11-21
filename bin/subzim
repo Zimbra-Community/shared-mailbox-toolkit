@@ -39,8 +39,10 @@ SUBSCRIBER=$1
 MAILBOX=$2
 PERSONA="${MAILBOX%@*}.persona"
 
+NAME=`zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
+
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg / account $SUBSCRIBER rwixd
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Inbox account $SUBSCRIBER rwixd
 /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER cm /$MAILBOX $MAILBOX /
 /opt/zimbra/bin/zmprov grr account $MAILBOX usr $SUBSCRIBER sendAs
-/opt/zimbra/bin/zmprov createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE
+/opt/zimbra/bin/zmprov createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay "$NAME"
