@@ -41,6 +41,8 @@ PERSONA="${MAILBOX%@*}.persona"
 
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg / account $SUBSCRIBER none
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Inbox account $SUBSCRIBER none
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Sent account $SUBSCRIBER none
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Junk account $SUBSCRIBER none
 #the following command would remove the mountpoint, but there is no guarantee the user renamed it and put a folder with the same name.
 #as such this may remove an actual mail folder with mail messages instead of a mount point. So we cannot clean up the mountpoint via the CLI.
 #/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER df /$MAILBOX
