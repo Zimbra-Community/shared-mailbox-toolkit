@@ -43,6 +43,8 @@ NAME=`zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayNam
 
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg / account $SUBSCRIBER rwixd
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Inbox account $SUBSCRIBER rwixd
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Sent account $SUBSCRIBER rwixd
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Junk account $SUBSCRIBER rwixd
 /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER cm /$MAILBOX $MAILBOX /
 /opt/zimbra/bin/zmprov grr account $MAILBOX usr $SUBSCRIBER sendAs
 /opt/zimbra/bin/zmprov deleteIdentity $SUBSCRIBER $PERSONA
