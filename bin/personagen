@@ -1,19 +1,19 @@
 #!/bin/bash
 
 # Copyright (C) 2014-2016  Barry de Graaff
-# 
+#
 # Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see http://www.gnu.org/licenses/.
 
@@ -26,8 +26,7 @@ echo
 exit 1
 fi
 
-PARAMS=1
-if [ $# -ne "$PARAMS" ]
+if [ $# -eq 0 ];
 then
 echo "Generate personas/identities for all aliasses of an account."
 echo "personagen <account>"
@@ -35,11 +34,10 @@ echo
 exit 1
 fi
 
-NAME=`zmprov ga $1 displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
+NAME=`/opt/zimbra/bin/zmprov ga $1 displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
 
 for i in $( /opt/zimbra/bin/zmprov ga $1 zimbraMailAlias | /usr/bin/grep zimbraMailAlias | /usr/bin/awk '{print $2}'  ); do
    PERSONA="${i%@*}.persona"
    /opt/zimbra/bin/zmprov createIdentity $1 $PERSONA zimbraPrefFromAddress $i zimbraPrefWhenSentToAddresses $i zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay "$NAME"
 done
 exit 0
-

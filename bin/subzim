@@ -39,7 +39,7 @@ SUBSCRIBER=$1
 MAILBOX=$2
 PERSONA="${MAILBOX%@*}.persona"
 
-NAME=`zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
+NAME=`/opt/zimbra/bin/zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
 
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg / account $SUBSCRIBER rwixd
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Inbox account $SUBSCRIBER rwixd

@@ -19,15 +19,16 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 package tk.barrydegraaff.toolkit;
 
 import java.util.Map;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
+
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
 
 public class ShareToolkitSoapHandler extends DocumentHandler {
     public Element handle(Element request, Map<String, Object> context)
@@ -40,39 +41,30 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
             );
             Element shareToolkitResult = response.addUniqueElement("shareToolkitResult");
 
-            switch (request.getAttribute("action"))
-            {
+            switch (request.getAttribute("action")) {
                 case "getAccounts":
-                    shareToolkitResult.setText(this.runCommand("/opt/zimbra/bin/zmprov -l gaa"));
+                    shareToolkitResult.setText(this.runCommand("/usr/local/sbin/acctalias", "", ""));
                     break;
-                case "createShare": case "removeShare":
-                    if((this.validate(request.getAttribute("accountb")))&&(this.validate(request.getAttribute("accounta"))))
-                    {
-                        if(request.getAttribute("action").equals("createShare"))
-                        {
-                           this.runCommand("/usr/local/sbin/subzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta"));
-                        }
-                        else if(request.getAttribute("action").equals("removeShare"))
-                        {
-                            this.runCommand("/usr/local/sbin/unsubzim " + request.getAttribute("accountb")  + " " + request.getAttribute("accounta"));
+                case "createShare":
+                case "removeShare":
+                    if ((this.validate(request.getAttribute("accountb"))) && (this.validate(request.getAttribute("accounta")))) {
+                        if (request.getAttribute("action").equals("createShare")) {
+                            this.runCommand("/usr/local/sbin/subzim", request.getAttribute("accountb"), request.getAttribute("accounta"));
+                        } else if (request.getAttribute("action").equals("removeShare")) {
+                            this.runCommand("/usr/local/sbin/unsubzim", request.getAttribute("accountb"), request.getAttribute("accounta"));
                         }
 
                         shareToolkitResult.setText("");
-                    }
-                    else
-                    {
+                    } else {
                         shareToolkitResult.setText("Invalid email address specified.");
                     }
                 case "createPersonas":
-                if(this.validate(request.getAttribute("accounta")))
-                {
-                    this.runCommand("/usr/local/sbin/personagen " + request.getAttribute("accounta"));
-                    shareToolkitResult.setText("");
-                }
-                else
-                {
-                    shareToolkitResult.setText("Invalid email address specified.");
-                }
+                    if (this.validate(request.getAttribute("accounta"))) {
+                        this.runCommand("/usr/local/sbin/personagen", request.getAttribute("accounta"), "");
+                        shareToolkitResult.setText("");
+                    } else {
+                        shareToolkitResult.setText("Invalid email address specified.");
+                    }
                     break;
             }
             return response;
@@ -85,23 +77,26 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
         }
 
     }
+
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public static boolean validate(String emailStr) {
-        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
         return matcher.find();
     }
 
-    private String runCommand(String cmd) throws ServiceException
-    {
+    private String runCommand(String cmd, String arg1, String arg2) throws ServiceException {
         try {
-            Runtime rt = Runtime.getRuntime();
-            Process pr = rt.exec(cmd);
-            BufferedReader cmdOutputBuffer = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+            ProcessBuilder pb = new ProcessBuilder()
+                    .command(cmd, arg1, arg2)
+                    .redirectErrorStream(true);
+            Process p = pb.start();
+
+            BufferedReader cmdOutputBuffer = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
             StringBuilder builder = new StringBuilder();
-            String aux= "";
+            String aux = "";
             while ((aux = cmdOutputBuffer.readLine()) != null) {
                 builder.append(aux);
                 builder.append(';');
