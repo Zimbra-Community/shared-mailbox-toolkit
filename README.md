@@ -56,6 +56,7 @@ Installed in /usr/local/sbin an can be run as user `zimbra`:
 * `unsubzim`: Revoke share created by subzim command (revoke root share).
 * `personagen`: Generate personas/identities for all aliasses of an account.
 * `removeshares`: Revoke all shares from an account. One can use this for managing people going into a different department, or in case the web UI fails to load due to sharing bugs.
+* `submachinegun`: Use this in case you are missing folders in your shared account. Read in-script comments for more details.
 
 ### License
 

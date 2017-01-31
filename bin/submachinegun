@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Copyright (C) 2014-2016  Barry de Graaff
+# 
+# Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see http://www.gnu.org/licenses/.
+
+WHO=`whoami`
+if [ $WHO != "zimbra" ]
+then
+echo
+echo "Execute this scipt as user zimbra (\"su - zimbra\")"
+echo
+exit 1
+fi
+
+PARAMS=2
+if [ $# -ne "$PARAMS" ]
+then
+echo "Brute force the sharing of folders when Zimbra goes fubar on large numbers of subfolders."
+echo "Always use subzim first:"
+echo "subzim <primary account needing access to> <this secondary account>"
+echo "Afterswards, use submachinegun to brute force skipped folders:"
+echo "submachinegun <primary account needing access to> <this secondary account>"
+echo
+echo "You can safely ignore all the mail.GRANT_EXISTS errors, this is expected behaviour"
+echo
+exit 1
+fi
+
+SUBSCRIBER=$1
+MAILBOX=$2
+
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX gaf |egrep '^ *[0-9]* *mess.*' |sed -e 's/^[^/]*\//\//' |while read i; do /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg "$i" account $SUBSCRIBER rwixd;done
