@@ -42,7 +42,7 @@ The client Zimlet will not show duplicated options when selecting FROM address.
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/master/help/from.png)
 
 ### Screenshot of additional header
-An additional header is added to the email to identify the user sending email from a shared mailbox. For example it can help finding out what sales person was sending out mail from sales@myzimbra.com. The header can be set via the installer or running `   su - zimbra -c "zmprov mcf zimbraSmtpSendAddAuthenticatedUser TRUE"` and `u - zimbra -c "zmmtactl restart"`.
+Optionally an additional header is added to the email to identify the user sending email from a shared mailbox. For example it can help finding out what sales person was sending out mail from sales@myzimbra.com. The header can be set via the installer or running `   su - zimbra -c "zmprov mcf zimbraSmtpSendAddAuthenticatedUser TRUE"` and `u - zimbra -c "zmmtactl restart"`.
 ![alt tag](https://raw.githubusercontent.com/Zimbra-Community/shared-mailbox-toolkit/245ed7b8e4799004e81c4aa844bf6a0edf679f77/help/header.png)
 
 ### Screenshot of the installer
