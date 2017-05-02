@@ -40,6 +40,7 @@ var ShareToolkitClient = tk_barrydegraaff_sharetoolkit_client_HandlerObject;
  * ShareToolkitClient uses the init function to load openpgp.js and configure the user settings and runtime variables.
  */
 ShareToolkitClient.prototype.init = function() {
+   ShareToolkitClient.lastClicked = 0;
 
     /* _addSendAsOrSendOboAddresses by Michele Olivo ZeXtras
      * If a user has configured a persona and has sendAs rights for mailbox@example.com, using
@@ -132,12 +133,22 @@ ZmFolderTreeController.prototype._itemClicked = function(folder, openInTab) {
 				appCtxt.set(ZmSetting.SORTING_PREF, sortBy, folder.nId);
 			}
 		}
+
       if ((folder._isRemote == true) && (folder.oname == "USER_ROOT"))
       {
-         console.log("ShareToolkitClient: shared mailbox detected, rewrite query to /Inbox");
+         //If the user really wants to open/close the mountpoint, do it on the second click within 2 seconds.
+         var last = ShareToolkitClient.lastClicked;
+         ShareToolkitClient.lastClicked = Date.now();
+         var newClick = ShareToolkitClient.lastClicked;
+         var diff = newClick-last;         
+         
          var query = folder.createQuery();
-         query = query.substring(0,query.length -1);
-         query = query + '/inbox"';
+         if(diff > 2000)
+         {
+            console.log("ShareToolkitClient: shared mailbox detected, rewrite query to /Inbox");
+            query = query.substring(0,query.length -1);
+            query = query + '/inbox"';
+         }   
          
       }
       else
