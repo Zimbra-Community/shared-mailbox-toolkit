@@ -1,4 +1,4 @@
-Zimbra Shared Mailbox Toolkit (beta)
+Zimbra Shared Mailbox Toolkit
 ==========
 
 If you find Zimbra Shared Mailbox Toolkit useful and want to support its continued development, you can make donations via:
