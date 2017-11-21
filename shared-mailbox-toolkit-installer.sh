@@ -50,14 +50,13 @@ YUM_CMD=$(which yum)
 APT_CMD=$(which apt-get)
 GIT_CMD=$(which git)
 ZIP_CMD=$(which zip)
-JAVA_CMD=$(which java)
 set -e 
 
-if [[ -z $GIT_CMD ]] || [[ -z $ZIP_CMD ]] || [[ -z $JAVA_CMD ]]; then
+if [[ -z $GIT_CMD ]] || [[ -z $ZIP_CMD ]]; then
    if [[ ! -z $YUM_CMD ]]; then
       yum install -y git zip
    else
-      apt-get install -y git zip default-jdk
+      apt-get install -y git zip
    fi
 fi
 
