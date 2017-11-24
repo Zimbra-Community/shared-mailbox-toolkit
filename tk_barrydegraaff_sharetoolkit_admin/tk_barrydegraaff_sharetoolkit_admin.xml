@@ -14,7 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 -->
-<zimlet name="tk_barrydegraaff_sharetoolkit_admin" version="0.0.2" label="Share Toolkit" description="Share Toolkit" extension="true">
+<zimlet name="tk_barrydegraaff_sharetoolkit_admin" version="0.5.0" label="Share Toolkit" description="Share Toolkit" extension="true">
     <include>tk_barrydegraaff_sharetoolkit_admin.js</include>
     <include>ZaShareToolkitViewController.js</include>
     <include>ZaShareToolkitTab.js</include>
