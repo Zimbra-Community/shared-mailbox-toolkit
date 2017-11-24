@@ -35,6 +35,7 @@ ZaShareToolkitTab = function(parent, entry) {
 
     document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = '<div style="padding-left:10px"><h1>Share Toolkit</h1>' +
     '<h2>Create and remove shares</h2>This option allows you to share an entire account with another account. Useful for department and team mailboxes.<br><br><select id="ShareToolkit-action" onchange="this.value==\'createShare\' ? document.getElementById(\'ShareToolkit-withfrom\').innerHTML = \'with\' : document.getElementById(\'ShareToolkit-withfrom\').innerHTML = \'from\'" ><option value="createShare">Share</option><option value="removeShare">Unshare</option></select> the account <input type="text" id="ShareToolkit-account-a" list="ShareToolkit-datalist" placeholder="user@domain.com">&nbsp;<span id="ShareToolkit-withfrom">with</span>:&nbsp;<input type="text" id="ShareToolkit-account-b" list="ShareToolkit-datalist" placeholder="other-user@domain.com"><datalist id="ShareToolkit-datalist"></datalist>&nbsp;&nbsp;<button id="ShareToolkit-btnCreateShare">OK</button>' +
+    '<br><input type="checkbox" id="ShareToolkit-disablePersonaCreation">Disable adding/removing persona\'s.' +
     '<br><br><hr>' +
     '<h2>Generate persona\'s</h2>This option allows you to generate a persona for each alias in the users account. <br><br><input type="text" id="ShareToolkit-account-c" list="ShareToolkit-datalist" placeholder="user@domain.com">&nbsp;&nbsp;<button id="ShareToolkit-btnPersonaGen">OK</button>' +
     '<br><br><hr>' +
@@ -92,6 +93,7 @@ ZaShareToolkitTab.prototype.btnCreateRemoveShare = function () {
     }   
     var accountA = document.getElementById('ShareToolkit-account-a').value;
     var accountB = document.getElementById('ShareToolkit-account-b').value;
+    var skipPersonaCreation = document.getElementById('ShareToolkit-disablePersonaCreation').checked;
     
     if(accountA && accountB && (accountA !== accountB))
     {
@@ -99,6 +101,7 @@ ZaShareToolkitTab.prototype.btnCreateRemoveShare = function () {
        soapDoc.getMethod().setAttribute("action", document.getElementById('ShareToolkit-action').value);
        soapDoc.getMethod().setAttribute("accounta", accountA);
        soapDoc.getMethod().setAttribute("accountb", accountB);
+       soapDoc.getMethod().setAttribute("skipPersonaCreation", skipPersonaCreation);
        var csfeParams = new Object();
        csfeParams.soapDoc = soapDoc;
        csfeParams.asyncMode = true;
