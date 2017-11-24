@@ -26,17 +26,17 @@ echo
 exit 1
 fi
 
-PARAMS=2
-if [ $# -ne "$PARAMS" ]
+if [ $# -ne 2 ] && [ $# -ne 3 ]
 then
 echo "Share an entire mailbox with another mailbox (root share)."
-echo "subzim <primary account needing access to> <this secondary account>"
+echo "subzim <primary account needing access to> <this secondary account> <optional, to skip persona creation/deletion: N>"
 echo
 exit 1
 fi
 
 SUBSCRIBER=$1
 MAILBOX=$2
+DO_PERSONAS=$3
 PERSONA="${MAILBOX%@*}.persona"
 
 NAME=`/opt/zimbra/bin/zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
@@ -47,7 +47,14 @@ NAME=`/opt/zimbra/bin/zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Junk account $SUBSCRIBER rwixd
 /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER cm /$MAILBOX $MAILBOX /
 /opt/zimbra/bin/zmprov grr account $MAILBOX usr $SUBSCRIBER sendAs
-/opt/zimbra/bin/zmprov deleteIdentity $SUBSCRIBER $PERSONA
-/opt/zimbra/bin/zmprov createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay "$NAME"
+
+if [[ "$DO_PERSONAS" == 'N' || "$DO_PERSONAS" == 'n' ]];
+then
+   echo "Persona creation/deletion skipped per user request."
+else
+   /opt/zimbra/bin/zmprov deleteIdentity $SUBSCRIBER $PERSONA
+   /opt/zimbra/bin/zmprov createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay "$NAME"
+fi
+
 /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER dofrl "$PERSONA.sent"
 /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER aofrl "$PERSONA.sent" active any address "from" all contains "$MAILBOX" fileinto "$MAILBOX/Sent" stop
