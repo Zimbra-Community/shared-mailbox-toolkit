@@ -30,7 +30,7 @@ PARAMS=2
 if [ $# -ne 2 ] && [ $# -ne 3 ]
 then
 echo "Revoke share created by subzim command (revoke root share)."
-echo "unsubzim <primary account remove access to> <this secondary account> <optional, to skip persona creation/deletion: N>"
+echo "unsubzim <primary account remove access to> <this secondary account> <optional, to skip configuring sendAs (persona,filter): N>"
 echo
 exit 1
 fi
@@ -47,13 +47,12 @@ PERSONA="${MAILBOX%@*}.persona"
 #the following command would remove the mountpoint, but there is no guarantee the user renamed it and put a folder with the same name.
 #as such this may remove an actual mail folder with mail messages instead of a mount point. So we cannot clean up the mountpoint via the CLI.
 #/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER df /$MAILBOX
-/opt/zimbra/bin/zmprov rvr account $MAILBOX usr $SUBSCRIBER sendAs
 
 if [[ "$DO_PERSONAS" == 'N' || "$DO_PERSONAS" == 'n' ]];
 then
    echo "Persona creation/deletion skipped per user request."
 else
+   /opt/zimbra/bin/zmprov rvr account $MAILBOX usr $SUBSCRIBER sendAs
    /opt/zimbra/bin/zmprov deleteIdentity $SUBSCRIBER $PERSONA
+   /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER dofrl "$PERSONA.sent"
 fi
-
-/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER dofrl "$PERSONA.sent"
