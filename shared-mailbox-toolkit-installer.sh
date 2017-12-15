@@ -54,7 +54,7 @@ set -e
 
 if [[ -z $GIT_CMD ]] || [[ -z $ZIP_CMD ]]; then
    if [[ ! -z $YUM_CMD ]]; then
-      yum install -y git zip
+      yum install -y git zip newt
    else
       apt-get install -y git zip
    fi
