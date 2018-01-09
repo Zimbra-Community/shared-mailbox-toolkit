@@ -10,6 +10,8 @@ Demo video: https://youtu.be/8dzVqPENaBk
 Do you have generic mailboxes for you sales department, helpdesk or info@yourcompany.com, use Zimbra Shared Mailbox Toolkit to 
 share those mailboxes with your staff. For long time Zimbra users: this toolkit is meant to bring back family mailboxes to Zimbra 8+.
 
+By default shares are created with SendAs rights and read/write access (rwixd). This allows the user to email on behalf of the shared account and sent mail will be go to the shared account sent folder. An outgoing mail filter and persona is set to achieve this.
+
 Designed for Zimbra version 8.6 and 8.7.
 
 Bugs and feedback: https://github.com/Zimbra-Community/shared-mailbox-toolkit/issues

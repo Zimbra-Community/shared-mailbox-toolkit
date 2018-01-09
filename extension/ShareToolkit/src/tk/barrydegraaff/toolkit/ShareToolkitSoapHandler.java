@@ -43,26 +43,36 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
 
             switch (request.getAttribute("action")) {
                 case "getAccounts":
-                    shareToolkitResult.setText(this.runCommand("/usr/local/sbin/acctalias", "", "", ""));
+                    shareToolkitResult.setText(this.runCommand("/usr/local/sbin/acctalias", "", "", "", ""));
                     break;
                 case "createShare":
                 case "removeShare":
                     if ((this.validate(request.getAttribute("accountb"))) && (this.validate(request.getAttribute("accounta")))) {
                         final String skipPersonaCreation;
-                        if("true".equals(request.getAttribute("skipPersonaCreation")))
-                        {
+                        if ("true".equals(request.getAttribute("skipPersonaCreation"))) {
                             skipPersonaCreation = "N";
-                        }
-                        else
-                        {
+                        } else {
                             skipPersonaCreation = "Y";
                         }
 
-                        if (request.getAttribute("action").equals("createShare")) {
-                            this.runCommand("/usr/local/sbin/subzim", request.getAttribute("accountb"), request.getAttribute("accounta"), skipPersonaCreation);
-                        } else if (request.getAttribute("action").equals("removeShare")) {
-                            this.runCommand("/usr/local/sbin/unsubzim", request.getAttribute("accountb"), request.getAttribute("accounta"), skipPersonaCreation);
+                        final String permissions;
+                        if (("r".equals(request.getAttribute("permissions"))) ||
+                                ("rw".equals(request.getAttribute("permissions"))) ||
+                                ("rwix".equals(request.getAttribute("permissions"))) ||
+                                ("rwixd".equals(request.getAttribute("permissions"))) ||
+                                ("rwixda".equals(request.getAttribute("permissions"))) ||
+                                ("none".equals(request.getAttribute("permissions"))))
+                        {
+                            permissions = request.getAttribute("permissions");
+                        } else {
+                            permissions = "rwixd";
                         }
+
+                            if (request.getAttribute("action").equals("createShare")) {
+                                this.runCommand("/usr/local/sbin/subzim", request.getAttribute("accountb"), request.getAttribute("accounta"), skipPersonaCreation, permissions);
+                            } else if (request.getAttribute("action").equals("removeShare")) {
+                                this.runCommand("/usr/local/sbin/unsubzim", request.getAttribute("accountb"), request.getAttribute("accounta"), skipPersonaCreation, permissions);
+                            }
 
                         shareToolkitResult.setText("");
                     } else {
@@ -70,7 +80,7 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
                     }
                 case "createPersonas":
                     if (this.validate(request.getAttribute("accounta"))) {
-                        this.runCommand("/usr/local/sbin/personagen", request.getAttribute("accounta"), "", "");
+                        this.runCommand("/usr/local/sbin/personagen", request.getAttribute("accounta"), "", "", "");
                         shareToolkitResult.setText("");
                     } else {
                         shareToolkitResult.setText("Invalid email address specified.");
@@ -96,10 +106,10 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
         return matcher.find();
     }
 
-    private String runCommand(String cmd, String arg1, String arg2, String arg3) throws ServiceException {
+    private String runCommand(String cmd, String arg1, String arg2, String arg3, String arg4) throws ServiceException {
         try {
             ProcessBuilder pb = new ProcessBuilder()
-                    .command(cmd, arg1, arg2, arg3)
+                    .command(cmd, arg1, arg2, arg3, arg4)
                     .redirectErrorStream(true);
             Process p = pb.start();
 

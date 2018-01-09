@@ -26,25 +26,52 @@ echo
 exit 1
 fi
 
-if [ $# -ne 2 ] && [ $# -ne 3 ]
+if [ $# -ne 2 ] && [ $# -ne 3 ] && [ $# -ne 4 ]
 then
-echo "Share an entire mailbox with another mailbox (root share)."
-echo "subzim <primary account needing access to> <this secondary account> <optional, to skip configuring sendAs (persona,filter): N>"
-echo
+echo ""
+echo "Subzim shares an entire mailbox with another mailbox (root share)."
+echo "Basic usage: subzim employee@example.com salesdept@example.com"
+echo ""
+echo "Optional 3rd parameter:"
+echo "To skip configuring sendAs (persona and filter) set 3rd param to: N"
+echo "Default: sendAs, persona and filter are created"
+echo ""
+echo "Optional 4th parameter:"
+echo "Specify share permissions like: r, rw, rwix, rwixd, rwixda, none"
+echo "See: https://wiki.zimbra.com/wiki/Zmmailbox#Permissions_.28modifyFolderGrant.29"
+echo "Default: rwixd"
+echo ""
+echo "To create a read-only share without sendAs rights:"
+echo "subzim employee@example.com salesdept@example.com N r"
+echo ""
 exit 1
 fi
 
 SUBSCRIBER=$1
 MAILBOX=$2
 DO_PERSONAS=$3
+PERMISSIONS=$4
 PERSONA="${MAILBOX%@*}.persona"
+
+if [ "$PERMISSIONS" == "r" ] || 
+[ "$PERMISSIONS" == "rw" ] ||
+[ "$PERMISSIONS" == "rwix" ] ||
+[ "$PERMISSIONS" == "rwixd" ] ||
+[ "$PERMISSIONS" == "rwixda" ] ||
+[ "$PERMISSIONS" == "none" ]
+then
+echo "Setting the permissions: $PERMISSIONS" 
+else
+PERMISSIONS="rwixd"
+echo "Setting the default permissions: $PERMISSIONS" 
+fi
 
 NAME=`/opt/zimbra/bin/zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
 
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg / account $SUBSCRIBER rwixd
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Inbox account $SUBSCRIBER rwixd
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Sent account $SUBSCRIBER rwixd
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Junk account $SUBSCRIBER rwixd
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg / account $SUBSCRIBER $PERMISSIONS
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Inbox account $SUBSCRIBER $PERMISSIONS
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Sent account $SUBSCRIBER $PERMISSIONS
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Junk account $SUBSCRIBER $PERMISSIONS
 /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER cm /$MAILBOX $MAILBOX /
 
 if [[ "$DO_PERSONAS" == 'N' || "$DO_PERSONAS" == 'n' ]];

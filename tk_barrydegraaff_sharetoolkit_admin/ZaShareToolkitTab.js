@@ -34,9 +34,18 @@ ZaShareToolkitTab = function(parent, entry) {
     resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams);
 
     document.getElementById('ztab__SHARE_TOOLKIT').innerHTML = '<div style="padding-left:10px"><h1>Share Toolkit</h1>' +
-    '<h2>Create and remove shares</h2>This option allows you to share an entire account with another account. Useful for department and team mailboxes.<br><br><select id="ShareToolkit-action" onchange="this.value==\'createShare\' ? document.getElementById(\'ShareToolkit-withfrom\').innerHTML = \'with\' : document.getElementById(\'ShareToolkit-withfrom\').innerHTML = \'from\'" ><option value="createShare">Share</option><option value="removeShare">Unshare</option></select> the account <input type="text" id="ShareToolkit-account-a" list="ShareToolkit-datalist" placeholder="user@domain.com">&nbsp;<span id="ShareToolkit-withfrom">with</span>:&nbsp;<input type="text" id="ShareToolkit-account-b" list="ShareToolkit-datalist" placeholder="other-user@domain.com"><datalist id="ShareToolkit-datalist"></datalist>&nbsp;&nbsp;<button id="ShareToolkit-btnCreateShare">OK</button>' +
-    '<br><input type="checkbox" id="ShareToolkit-disablePersonaCreation">Share only (skip configuring sendAs/persona\'s and mail filter).' +
-    '<br><br><hr>' +
+    '<h2>Create and remove shares</h2>This option allows you to share an entire account with another account. Useful for department and team mailboxes.<br><br><select id="ShareToolkit-action" onchange="ZaShareToolkitTab.prototype.uiUpdate(this.value);" ><option value="createShare">Share</option><option value="removeShare">Unshare</option></select> the account <input type="text" id="ShareToolkit-account-a" list="ShareToolkit-datalist" placeholder="user@domain.com">&nbsp;<span id="ShareToolkit-withfrom">with</span>:&nbsp;<input type="text" id="ShareToolkit-account-b" list="ShareToolkit-datalist" placeholder="other-user@domain.com"><datalist id="ShareToolkit-datalist"></datalist>&nbsp;&nbsp;<button id="ShareToolkit-btnCreateShare">OK</button>' +
+    '<br><br><input type="checkbox" id="ShareToolkit-disablePersonaCreation">Share only (skip configuring sendAs/persona\'s and mail filter).' +
+    '<br><br><b>Permissions:</b>' +
+    '<br><select onchange="ZaShareToolkitTab.prototype.uiUpdate(this.value);" id="ShareToolkit-permissions">'+
+    '<option value="r">r</option>' +
+    '<option value="rw">rw</option>' +
+    '<option value="rwix">rwix</option>' +
+    '<option selected="selected" value="rwixd">rwixd</option>' +
+    '<option value="rwixda">rwixda</option>' +
+    '<option value="none">none</option></select>' +    
+    '<small style="font-size:11px;"><ul><li> (r)ead - search, view overviews and items</li><li> (w)rite - edit drafts/contacts/notes, set flags </li><li> (i)nsert - copy/add to directory, create subfolders action</li><li> (x) - workflow actions, like accepting appointments</li><li> (d)elete - delete items and subfolders, set \Deleted flag</li><li> (a)dminister - delegate admin and change permissions</li></ul></small>' +
+    '<br><hr>' +
     '<h2>Generate persona\'s</h2>This option allows you to generate a persona for each alias in the users account. <br><br><input type="text" id="ShareToolkit-account-c" list="ShareToolkit-datalist" placeholder="user@domain.com">&nbsp;&nbsp;<button id="ShareToolkit-btnPersonaGen">OK</button>' +
     '<br><br><hr>' +
     '<h2>Status</h2><div id="ShareToolkit-status" style="color:#aaaaaa; font-style: italic;"></div></div>';   
@@ -94,6 +103,7 @@ ZaShareToolkitTab.prototype.btnCreateRemoveShare = function () {
     var accountA = document.getElementById('ShareToolkit-account-a').value;
     var accountB = document.getElementById('ShareToolkit-account-b').value;
     var skipPersonaCreation = document.getElementById('ShareToolkit-disablePersonaCreation').checked;
+    var permissions = document.getElementById('ShareToolkit-permissions').value;
     
     if(accountA && accountB && (accountA !== accountB))
     {
@@ -102,6 +112,7 @@ ZaShareToolkitTab.prototype.btnCreateRemoveShare = function () {
        soapDoc.getMethod().setAttribute("accounta", accountA);
        soapDoc.getMethod().setAttribute("accountb", accountB);
        soapDoc.getMethod().setAttribute("skipPersonaCreation", skipPersonaCreation);
+       soapDoc.getMethod().setAttribute("permissions", permissions);
        var csfeParams = new Object();
        csfeParams.soapDoc = soapDoc;
        csfeParams.asyncMode = true;
@@ -145,4 +156,26 @@ ZaShareToolkitTab.prototype.shareToolkitDefaultCallback = function (result) {
 
 ZaShareToolkitTab.prototype.status = function (statusText) {
    document.getElementById('ShareToolkit-status').innerHTML = statusText;
+}
+
+ZaShareToolkitTab.prototype.uiUpdate = function (value) {
+   if(value == 'createShare')
+   {
+      document.getElementById('ShareToolkit-withfrom').innerHTML = 'with';
+      document.getElementById('ShareToolkit-permissions').value = 'rwixd';
+      document.getElementById('ShareToolkit-permissions').disabled = false;
+   }
+   else if(value == 'none')
+   {
+      document.getElementById('ShareToolkit-withfrom').innerHTML = 'from';
+      document.getElementById('ShareToolkit-permissions').value = 'none';
+      document.getElementById('ShareToolkit-permissions').disabled = true;
+      document.getElementById('ShareToolkit-action').value = 'removeShare';
+   }
+   else if(value == 'removeShare')
+   {
+      document.getElementById('ShareToolkit-withfrom').innerHTML = 'from';
+      document.getElementById('ShareToolkit-permissions').value = 'none';
+      document.getElementById('ShareToolkit-permissions').disabled = true;
+   }
 }

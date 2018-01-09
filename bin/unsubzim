@@ -27,11 +27,17 @@ exit 1
 fi
 
 PARAMS=2
-if [ $# -ne 2 ] && [ $# -ne 3 ]
+if [ $# -ne 2 ] && [ $# -ne 3 ] && [ $# -ne 4 ]
 then
+echo ""
 echo "Revoke share created by subzim command (revoke root share)."
-echo "unsubzim <primary account remove access to> <this secondary account> <optional, to skip configuring sendAs (persona,filter): N>"
-echo
+echo "Basic usage: unsubzim employee@example.com salesdept@example.com"
+echo ""
+echo "Optional 3rd parameter:"
+echo "To skip configuring sendAs (persona and filter) set 3rd param to: N"
+echo "Default: sendAs, persona and filter are removed"
+echo ""
+echo "4th parameter: not implemented - always: none"
 exit 1
 fi
 
