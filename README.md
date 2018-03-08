@@ -58,6 +58,12 @@ Installed in /usr/local/sbin an can be run as user `zimbra`:
 * `removeshares`: Revoke all shares from an account. One can use this for managing people going into a different department, or in case the web UI fails to load due to sharing bugs.
 * `submachinegun`: Use this in case you are missing folders in your shared account. Read in-script comments for more details.
 
+### Enable the Admin Zimlet for delegated admins
+
+    zmprov ma testadmin@example.com +zimbraAdminConsoleUIComponents zimbraClientUploadView
+    zmprov grr global usr testadmin@example.com adminConsoleClientUploadRights
+    zmprov fc all
+
 ### License
 
 Copyright (C) 2015-2018  Barry de Graaff [Zeta Alliance](http://www.zetalliance.org/) and the _addSendAsOrSendOboAddresses patch by Michele [Olivo ZeXtras](https://www.zextras.com)
