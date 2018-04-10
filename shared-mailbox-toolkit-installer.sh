@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014-2016  Barry de Graaff
+# Copyright (C) 2014-2018  Barry de Graaff
 # 
 # Bugs and feedback: https://github.com/Zimbra-Community/pgp-zimlet/issues
 # 
@@ -63,7 +63,7 @@ fi
 TMPFOLDER="$(mktemp -d /tmp/shared-mailbox-toolkit-installer.XXXXXXXX)"
 echo "Download Shared Mailbox Toolkit to $TMPFOLDER"
 cd $TMPFOLDER
-git clone https://github.com/Zimbra-Community/shared-mailbox-toolkit
+git clone --depth=1 git://github.com/Zimbra-Community/shared-mailbox-toolkit
 cd shared-mailbox-toolkit
 
 if [[ $1 == *"Client Zimlet"* ]]
