@@ -66,21 +66,36 @@ PERMISSIONS="rwixd"
 echo "Setting the default permissions: $PERMISSIONS" 
 fi
 
-NAME=`/opt/zimbra/bin/zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
+PROFFILE="$(mktemp /tmp/subzim-prof.XXXXXXXX.txt)"
+BOXMFILE="$(mktemp /tmp/subzim-boxm.XXXXXXXX.txt)"
+BOXSFILE="$(mktemp /tmp/subzim-boxs.XXXXXXXX.txt)"
 
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg / account $SUBSCRIBER $PERMISSIONS
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Inbox account $SUBSCRIBER $PERMISSIONS
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Sent account $SUBSCRIBER $PERMISSIONS
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Junk account $SUBSCRIBER $PERMISSIONS
-/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER cm /$MAILBOX $MAILBOX /
+echo "" >> "${BOXMFILE}"
+echo "" >> "${BOXSFILE}"
+echo "" >> "${PROFFILE}"
+
+echo "mfg / account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
+echo "mfg /Inbox account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
+echo "mfg /Sent account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
+echo "mfg /Junk account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
+echo "cm /$MAILBOX $MAILBOX /" >> "${BOXSFILE}"
 
 if [[ "$DO_PERSONAS" == 'N' || "$DO_PERSONAS" == 'n' ]];
 then
    echo "Persona creation/deletion skipped per user request."
 else
-   /opt/zimbra/bin/zmprov grr account $MAILBOX usr $SUBSCRIBER sendAs
-   /opt/zimbra/bin/zmprov deleteIdentity $SUBSCRIBER $PERSONA
-   /opt/zimbra/bin/zmprov createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay "$NAME"
-   /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER dofrl "$PERSONA.sent"
-   /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER aofrl "$PERSONA.sent" active any address "from" all contains "$MAILBOX" fileinto "$MAILBOX/Sent" stop
+   NAME=`/opt/zimbra/bin/zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
+   echo "grr account $MAILBOX usr $SUBSCRIBER sendAs" >> "${PROFFILE}"
+   echo "deleteIdentity $SUBSCRIBER $PERSONA" >> "${PROFFILE}"
+   echo "createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay \"$NAME\"" >> "${PROFFILE}"
+   echo "dofrl \"$PERSONA.sent\"" >> "${BOXSFILE}"
+   echo "aofrl \"$PERSONA.sent\" active any address \"from\" all contains \"$MAILBOX\" fileinto \"$MAILBOX/Sent\" stop"  >> "${BOXSFILE}"
 fi
+
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX < "${BOXMFILE}"
+/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER < "${BOXSFILE}"
+/opt/zimbra/bin/zmprov < "${PROFFILE}"
+
+rm -f "${BOXMFILE}"
+rm -f "${BOXSFILE}"
+rm -f "${PROFFILE}"
