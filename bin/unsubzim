@@ -50,9 +50,9 @@ PROFFILE="$(mktemp /tmp/unsubzim-prof.XXXXXXXX.txt)"
 BOXMFILE="$(mktemp /tmp/unsubzim-boxm.XXXXXXXX.txt)"
 BOXSFILE="$(mktemp /tmp/unsubzim-boxs.XXXXXXXX.txt)"
 
-echo "" >> "${BOXMFILE}"
-echo "" >> "${BOXSFILE}"
-echo "" >> "${PROFFILE}"
+echo "" > "${BOXMFILE}"
+echo "" > "${BOXSFILE}"
+echo "" > "${PROFFILE}"
 
 echo "mfg / account $SUBSCRIBER none" >> "${BOXMFILE}"
 echo "mfg /Inbox account $SUBSCRIBER none" >> "${BOXMFILE}"

@@ -70,9 +70,9 @@ PROFFILE="$(mktemp /tmp/subzim-prof.XXXXXXXX.txt)"
 BOXMFILE="$(mktemp /tmp/subzim-boxm.XXXXXXXX.txt)"
 BOXSFILE="$(mktemp /tmp/subzim-boxs.XXXXXXXX.txt)"
 
-echo "" >> "${BOXMFILE}"
-echo "" >> "${BOXSFILE}"
-echo "" >> "${PROFFILE}"
+echo "" > "${BOXMFILE}"
+echo "" > "${BOXSFILE}"
+echo "" > "${PROFFILE}"
 
 echo "mfg / account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
 echo "mfg /Inbox account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"

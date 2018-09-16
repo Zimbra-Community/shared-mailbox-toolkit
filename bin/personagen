@@ -36,7 +36,7 @@ fi
 
 PROFFILE="$(mktemp /tmp/persona-prof.XXXXXXXX.txt)"
 
-echo "" >> "${PROFFILE}"
+echo "" > "${PROFFILE}"
 
 NAME=`/opt/zimbra/bin/zmprov ga $1 displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
 
