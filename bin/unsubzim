@@ -46,19 +46,32 @@ MAILBOX=$2
 DO_PERSONAS=$3
 PERSONA="${MAILBOX%@*}.persona"
 
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg / account $SUBSCRIBER none
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Inbox account $SUBSCRIBER none
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Sent account $SUBSCRIBER none
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX mfg /Junk account $SUBSCRIBER none
-#the following command would remove the mountpoint, but there is no guarantee the user renamed it and put a folder with the same name.
-#as such this may remove an actual mail folder with mail messages instead of a mount point. So we cannot clean up the mountpoint via the CLI.
-#/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER df /$MAILBOX
+PROFFILE="$(mktemp /tmp/unsubzim-prof.XXXXXXXX.txt)"
+BOXMFILE="$(mktemp /tmp/unsubzim-boxm.XXXXXXXX.txt)"
+BOXSFILE="$(mktemp /tmp/unsubzim-boxs.XXXXXXXX.txt)"
+
+echo "" >> "${BOXMFILE}"
+echo "" >> "${BOXSFILE}"
+echo "" >> "${PROFFILE}"
+
+echo "mfg / account $SUBSCRIBER none" >> "${BOXMFILE}"
+echo "mfg /Inbox account $SUBSCRIBER none" >> "${BOXMFILE}"
+echo "mfg /Sent account $SUBSCRIBER none" >> "${BOXMFILE}"
+echo "mfg /Junk account $SUBSCRIBER none" >> "${BOXMFILE}"
 
 if [[ "$DO_PERSONAS" == 'N' || "$DO_PERSONAS" == 'n' ]];
 then
    echo "Persona creation/deletion skipped per user request."
 else
-   /opt/zimbra/bin/zmprov rvr account $MAILBOX usr $SUBSCRIBER sendAs
-   /opt/zimbra/bin/zmprov deleteIdentity $SUBSCRIBER $PERSONA
-   /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER dofrl "$PERSONA.sent"
+   echo "rvr account $MAILBOX usr $SUBSCRIBER sendAs" >> "${PROFFILE}"
+   echo "deleteIdentity $SUBSCRIBER $PERSONA" >> "${PROFFILE}"
+   echo "dofrl \"$PERSONA.sent\"" >> "${BOXSFILE}"
 fi
+
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX < "${BOXMFILE}"
+/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER < "${BOXSFILE}"
+/opt/zimbra/bin/zmprov < "${PROFFILE}"
+
+rm -f "${BOXMFILE}"
+rm -f "${BOXSFILE}"
+rm -f "${PROFFILE}"
