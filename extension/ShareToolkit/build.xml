@@ -1,0 +1,36 @@
+<project name="ShareToolkit" default="jar">
+
+    <property name="zimbra.opt" location="/opt/zimbra" />
+    <property name="lib.dir" location="${zimbra.opt}/lib/jars" />
+    <property name="jetty.dir" location="${zimbra.opt}/jetty" />
+    <property name="webapps.service.dir" location="${jetty.dir}/webapps/service/WEB-INF/lib" />
+    <property name="webapps.zimbra.dir" location="${jetty.dir}/webapps/zimbra/WEB-INF/lib" />
+
+    <path id="class.path">
+        <pathelement location="${lib.dir}" />
+        <pathelement location="${webapps.service.dir}" />
+        <pathelement location="${webapps.zimbra.dir}"/>
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${webapps.service.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${webapps.zimbra.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="compile" description="Compiles the source code">
+        <path id="all.java.path">
+            <pathelement location="src" />
+        </path>
+        <javac includeantruntime="false" destdir="build" debug="true" classpathref="class.path">
+            <src refid="all.java.path" />
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile" description="Creates the jar file">
+        <jar manifest="META-INF/MANIFEST.MF" destfile="dist/ShareToolkit.jar" basedir="build" />
+    </target>
+</project>
