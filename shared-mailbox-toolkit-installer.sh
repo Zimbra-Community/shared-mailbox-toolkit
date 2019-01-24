@@ -85,7 +85,7 @@ then
    su - zimbra -c "zmzimletctl deploy /tmp/tk_barrydegraaff_sharetoolkit_admin.zip"
    echo "Build Java server extension"
    TMPBUILDFOLDER="$(mktemp -d /tmp/shared-mailbox-toolkit-build.XXXXXXXX)"
-   cp -rv extension/ShareToolkit/ $TMPBUILDFOLDER
+   cp -r extension/ShareToolkit/ $TMPBUILDFOLDER
    chown zimbra:zimbra $TMPBUILDFOLDER
    chown -R zimbra:zimbra $TMPBUILDFOLDER/*
    su - zimbra -c "cd ${TMPBUILDFOLDER}/ShareToolkit ; ant"
