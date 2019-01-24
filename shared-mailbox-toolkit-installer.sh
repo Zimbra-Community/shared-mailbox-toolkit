@@ -128,3 +128,4 @@ then
 fi
 
 rm -Rf $TMPFOLDER
+rm -Rf $TMPBUILDFOLDER
