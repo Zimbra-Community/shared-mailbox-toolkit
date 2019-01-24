@@ -87,7 +87,7 @@ then
    echo "Deploy Java server extension"
    rm -Rf /opt/zimbra/lib/ext/ShareToolkit
    mkdir -p /opt/zimbra/lib/ext/ShareToolkit
-   cp -v extension/ShareToolkit/out/artifacts/ShareToolkit/ShareToolkit.jar /opt/zimbra/lib/ext/ShareToolkit/
+   cp -v extension/ShareToolkit/dist/ShareToolkit.jar /opt/zimbra/lib/ext/ShareToolkit/
 fi
 
 if [[ $1 == *"X-Authenticated-User header"* ]]
