@@ -83,11 +83,17 @@ then
    zip -r /tmp/tk_barrydegraaff_sharetoolkit_admin.zip *
    cd ..
    su - zimbra -c "zmzimletctl deploy /tmp/tk_barrydegraaff_sharetoolkit_admin.zip"
+   echo "Build Java server extension"
+   TMPBUILDFOLDER="$(mktemp -d /tmp/shared-mailbox-toolkit-build.XXXXXXXX)"
+   cp -rv extension/ShareToolkit/ $TMPBUILDFOLDER
+   chown zimbra:zimbra $TMPBUILDFOLDER
+   chown -R zimbra:zimbra $TMPBUILDFOLDER/*
+   su - zimbra -c "cd ${TMPBUILDFOLDER}/ShareToolkit ; ant"
 
    echo "Deploy Java server extension"
    rm -Rf /opt/zimbra/lib/ext/ShareToolkit
    mkdir -p /opt/zimbra/lib/ext/ShareToolkit
-   cp -v extension/ShareToolkit/dist/ShareToolkit.jar /opt/zimbra/lib/ext/ShareToolkit/
+   cp -v ${TMPBUILDFOLDER}/ShareToolkit/dist/ShareToolkit.jar /opt/zimbra/lib/ext/ShareToolkit/
 fi
 
 if [[ $1 == *"X-Authenticated-User header"* ]]
