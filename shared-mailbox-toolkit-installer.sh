@@ -50,13 +50,14 @@ YUM_CMD=$(which yum)
 APT_CMD=$(which apt-get)
 GIT_CMD=$(which git)
 ZIP_CMD=$(which zip)
+ANT_CMD=$(which ant)
 set -e 
 
-if [[ -z $GIT_CMD ]] || [[ -z $ZIP_CMD ]]; then
+if [[ -z $GIT_CMD ]] || [[ -z $ZIP_CMD ]] || [[ -z $ANT_CMD ]] ; then
    if [[ ! -z $YUM_CMD ]]; then
-      yum install -y git zip newt
+      yum install -y git zip newt ant
    else
-      apt-get install -y git zip
+      apt-get install -y git zip ant
    fi
 fi
 
@@ -88,7 +89,7 @@ then
    cp -r extension/ShareToolkit/ $TMPBUILDFOLDER
    chown zimbra:zimbra $TMPBUILDFOLDER
    chown -R zimbra:zimbra $TMPBUILDFOLDER/*
-   su - zimbra -c "cd ${TMPBUILDFOLDER}/ShareToolkit ; ant"
+   su - zimbra -c "cd ${TMPBUILDFOLDER}/ShareToolkit ; ${ANT_CMD}"
 
    echo "Deploy Java server extension"
    rm -Rf /opt/zimbra/lib/ext/ShareToolkit
