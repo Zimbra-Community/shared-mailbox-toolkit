@@ -48,16 +48,12 @@ echo "Check if git and zip are installed."
 set +e
 YUM_CMD=$(which yum)
 APT_CMD=$(which apt-get)
-GIT_CMD=$(which git)
-ZIP_CMD=$(which zip)
 set -e 
 
-if [[ -z $GIT_CMD ]] || [[ -z $ZIP_CMD ]]; then
-   if [[ ! -z $YUM_CMD ]]; then
-      yum install -y git zip newt
-   else
-      apt-get install -y git zip
-   fi
+if [[ ! -z $YUM_CMD ]]; then
+   yum install -y git zip newt
+else
+   apt-get install -y git zip whiptail
 fi
 
 TMPFOLDER="$(mktemp -d /tmp/shared-mailbox-toolkit-installer.XXXXXXXX)"
