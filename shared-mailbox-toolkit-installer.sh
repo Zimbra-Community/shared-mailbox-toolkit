@@ -30,7 +30,18 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 if [ -z "$1"  ]
-then
+   then
+   echo "Check if yum/apt installed."
+   set +e
+   YUM_CMD=$(which yum)
+   APT_CMD=$(which apt-get)
+   set -e 
+   
+   if [[ ! -z $YUM_CMD ]]; then
+      yum install -y newt
+   else
+      apt install -y whiptail
+   fi
    one=$(whiptail --title "Shared Mailbox Toolkit Installer" --checklist "Choose components to install. CLI commands are always installed." 15 60 4 \
    "Client Zimlet" "" on \
    "Admin Zimlet and extension" "" on \
