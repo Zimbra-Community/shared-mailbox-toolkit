@@ -101,6 +101,7 @@ if [[ $1 == *"X-Authenticated-User header"* ]]
 then
    echo "Enable X-Authenticated-User header"
    su - zimbra -c "zmprov mcf zimbraSmtpSendAddAuthenticatedUser TRUE"
+   su - zimbra -c "zmprov mcf zimbraMtaSmtpdSaslAuthenticatedHeader yes"
 fi
 
 echo "Deploy CLI tools"
