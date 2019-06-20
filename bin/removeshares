@@ -38,7 +38,7 @@ fi
 
 # One can use this for managing people going into a different department, or in case the web UI fail to load due to sharing bugs
 
-for i in $( /opt/zimbra/bin/zmmailbox -z -m admin@myzimbra.com gaf | /usr/bin/grep : | /usr/bin/awk -F "(" '{print $2}' | /usr/bin/awk -F ":" '{print $1}' ); do
+for i in $( /opt/zimbra/bin/zmmailbox -z -m $1 gaf | /usr/bin/grep : | /usr/bin/awk -F "(" '{print $2}' | /usr/bin/awk -F ":" '{print $1}' ); do
    #echo "$1 has accepted share(s) from or has mount points to" $i ":"
 
    for f in $( /opt/zimbra/bin/zmprov ga $i zimbraSharedItem | /usr/bin/grep granteeName:$1 | /usr/bin/awk -F "folderPath:" '{print $2}'  | /usr/bin/awk -F ";" '{print $1}' ); do
