@@ -18,6 +18,10 @@ Bugs and feedback: https://github.com/Zimbra-Community/shared-mailbox-toolkit/is
 
 Report security issues to info@barrydegraaff.tk (PGP fingerprint: 97f4694a1d9aedad012533db725ddd156d36a2d0)
 
+### Known issues
+
+If you are using multiple email domains (example.com, example.nl), and the shared account is not in the same domain as the users account, there will be spf/dkim misalignment. See: https://github.com/Zimbra-Community/shared-mailbox-toolkit/issues/42
+
 ========================================================================
 
 ### Install prerequisites
