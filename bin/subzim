@@ -51,7 +51,7 @@ SUBSCRIBER=$1
 MAILBOX=$2
 DO_PERSONAS=$3
 PERMISSIONS=$4
-PERSONA="${MAILBOX%@*}.persona"
+PERSONA="${MAILBOX}.persona"
 
 if [ "$PERMISSIONS" == "r" ] || 
 [ "$PERMISSIONS" == "rw" ] ||

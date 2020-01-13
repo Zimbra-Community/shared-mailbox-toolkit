@@ -41,7 +41,7 @@ echo "" > "${PROFFILE}"
 NAME=`/opt/zimbra/bin/zmprov ga $1 displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
 
 for i in $( /opt/zimbra/bin/zmprov ga $1 zimbraMailAlias | grep zimbraMailAlias | awk '{print $2}'  ); do
-   PERSONA="${i%@*}.persona"
+   PERSONA="${i}.persona"
    echo "createIdentity $1 $PERSONA zimbraPrefFromAddress $i zimbraPrefWhenSentToAddresses $i zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay \"$NAME\"" >> "${PROFFILE}"
 done
 

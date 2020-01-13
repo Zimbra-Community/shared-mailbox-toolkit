@@ -1,4 +1,4 @@
-<zimlet name="tk_barrydegraaff_sharetoolkit_client" version="0.5.3" label="Shared Mailbox Toolkit" description="Enhancements for the client web interface" target="main view-window">
+<zimlet name="tk_barrydegraaff_sharetoolkit_client" version="0.5.4" label="Shared Mailbox Toolkit" description="Enhancements for the client web interface" target="main view-window">
 	<include>tk_barrydegraaff_sharetoolkit_client.js</include>
 	<handlerObject>tk_barrydegraaff_sharetoolkit_client_HandlerObject</handlerObject>
 </zimlet>

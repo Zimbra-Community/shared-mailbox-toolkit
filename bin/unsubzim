@@ -44,7 +44,8 @@ fi
 SUBSCRIBER=$1
 MAILBOX=$2
 DO_PERSONAS=$3
-PERSONA="${MAILBOX%@*}.persona"
+PERSONA_OLD="${MAILBOX%@*}.persona"
+PERSONA="${MAILBOX}.persona"
 
 PROFFILE="$(mktemp /tmp/unsubzim-prof.XXXXXXXX.txt)"
 BOXMFILE="$(mktemp /tmp/unsubzim-boxm.XXXXXXXX.txt)"
@@ -67,6 +68,9 @@ else
    echo "rvr account $MAILBOX usr $SUBSCRIBER sendAs" >> "${PROFFILE}"
    echo "deleteIdentity $SUBSCRIBER $PERSONA" >> "${PROFFILE}"
    echo "dofrl \"$PERSONA.sent\"" >> "${BOXSFILE}"
+
+   echo "deleteIdentity $SUBSCRIBER $PERSONA_OLD" >> "${PROFFILE}"
+   echo "dofrl \"$PERSONA_OLD.sent\"" >> "${BOXSFILE}"
 fi
 
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX < "${BOXMFILE}"
