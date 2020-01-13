@@ -12,7 +12,7 @@ share those mailboxes with your staff. For long time Zimbra users: this toolkit 
 
 By default shares are created with SendAs rights and read/write access (rwixd). This allows the user to email on behalf of the shared account and sent mail will be go to the shared account sent folder. An outgoing mail filter and persona is set to achieve this.
 
-Supported Zimbra versions: 8.8.11.
+Supported Zimbra versions: 8.8.15.
 
 Bugs and feedback: https://github.com/Zimbra-Community/shared-mailbox-toolkit/issues
 
@@ -70,7 +70,7 @@ Installed in /usr/local/sbin an can be run as user `zimbra`:
 
 ### License
 
-Copyright (C) 2015-2019  Barry de Graaff [Zeta Alliance](https://zetalliance.org/) and the _addSendAsOrSendOboAddresses patch by Michele [Olivo ZeXtras](https://www.zextras.com)
+Copyright (C) 2015-2020  Barry de Graaff [Zeta Alliance](https://zetalliance.org/) and the _addSendAsOrSendOboAddresses patch by Michele [Olivo ZeXtras](https://www.zextras.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
