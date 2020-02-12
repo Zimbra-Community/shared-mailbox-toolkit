@@ -34,7 +34,6 @@ if [ -z "$1"  ]
    echo "Check if yum/apt installed."
    set +e
    YUM_CMD=$(which yum)
-   APT_CMD=$(which apt-get)
    set -e 
    
    if [[ ! -z $YUM_CMD ]]; then
@@ -58,7 +57,6 @@ fi
 echo "Check if git and zip are installed."
 set +e
 YUM_CMD=$(which yum)
-APT_CMD=$(which apt-get)
 set -e 
 
 if [[ ! -z $YUM_CMD ]]; then
