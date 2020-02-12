@@ -34,7 +34,6 @@ if [ -z "$1"  ]
    echo "Check if yum/apt installed."
    set +e
    YUM_CMD=$(which yum)
-   APT_CMD=$(which apt-get)
    set -e 
    
    if [[ ! -z $YUM_CMD ]]; then
@@ -58,7 +57,6 @@ fi
 echo "Check if git and zip are installed."
 set +e
 YUM_CMD=$(which yum)
-APT_CMD=$(which apt-get)
 set -e 
 
 if [[ ! -z $YUM_CMD ]]; then
@@ -68,10 +66,13 @@ else
 fi
 
 TMPFOLDER="$(mktemp -d /tmp/shared-mailbox-toolkit-installer.XXXXXXXX)"
-echo "Download Shared Mailbox Toolkit to $TMPFOLDER"
-cd $TMPFOLDER
-git clone --depth=1 git://github.com/Zimbra-Community/shared-mailbox-toolkit
-cd shared-mailbox-toolkit
+
+if ! git remote -v | grep /shared-mailbox-toolkit.git; then
+  echo "Download Shared Mailbox Toolkit to $TMPFOLDER"
+  cd $TMPFOLDER
+  git clone --depth=1 git://github.com/Zimbra-Community/shared-mailbox-toolkit
+  cd shared-mailbox-toolkit
+fi
 
 if [[ $1 == *"Client Zimlet"* ]]
 then
