@@ -26,22 +26,6 @@ echo
 exit 1
 fi
 
-# show a list of accounts and aliases for auto-completion (or something else)
+# show a list of accounts auto-completion (or something else)
 
-if [[ -x "/opt/zimbra/common/bin/ldapsearch" ]]
-then
-# 8.7
-/opt/zimbra/common/bin/ldapsearch -LLL -x -D"`/opt/zimbra/bin/zmlocalconfig -s zimbra_ldap_userdn | \
-       awk '{print $3}'`" -w"`/opt/zimbra/bin/zmlocalconfig -s zimbra_ldap_password | \
-       awk '{print $3}'`" -H `/opt/zimbra/bin/zmlocalconfig ldap_url | \
-       awk '{print $3}'` $* |        grep ^mail |        awk '{print $2}' |        sort
-else
-# pre 8.7
-/opt/zimbra/openldap/bin/ldapsearch -LLL -x -D"`/opt/zimbra/bin/zmlocalconfig -s zimbra_ldap_userdn | \
-       awk '{print $3}'`" -w"`/opt/zimbra/bin/zmlocalconfig -s zimbra_ldap_password | \
-       awk '{print $3}'`" -H `/opt/zimbra/bin/zmlocalconfig ldap_url | \
-       awk '{print $3}'` $* | \
-       grep ^mail | \
-       awk '{print $2}' | \
-       sort
-fi       
+/opt/zimbra/bin/zmprov -l gaa | sort
