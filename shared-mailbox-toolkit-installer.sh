@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014-2019  Barry de Graaff
+# Copyright (C) 2014-2020  Barry de Graaff
 # 
 # Bugs and feedback: https://github.com/Zimbra-Community/shared-mailbox-toolkit/issues
 # 
@@ -129,5 +129,16 @@ if [[ $1 == *"Admin Zimlet and extension"* ]]
 then
    echo "su - zimbra -c \"zmmailboxdctl restart\""
 fi
+
+
+SESSION_LIMIT=$(zmlocalconfig zimbra_session_limit_admin | awk '{print $3}')
+if [ $SESSION_LIMIT -lt 10 ]
+then
+   echo "WARNING: zimbra_session_limit_admin is:" $SESSION_LIMIT
+   echo "Consider changing it to 10 if you run into troubles when creating shares on the Web UI."
+   echo "zmlocalconfig -e zimbra_session_limit_admin=10"
+   echo "zmmailboxdctl restart"
+fi
+
 
 rm -Rf $TMPFOLDER
