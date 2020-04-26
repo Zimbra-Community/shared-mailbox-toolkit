@@ -131,7 +131,7 @@ then
 fi
 
 
-SESSION_LIMIT=$(zmlocalconfig zimbra_session_limit_admin | awk '{print $3}')
+SESSION_LIMIT=$(/opt/zimbra/bin/zmlocalconfig zimbra_session_limit_admin | awk '{print $3}')
 if [ $SESSION_LIMIT -lt 10 ]
 then
    echo "WARNING: zimbra_session_limit_admin is:" $SESSION_LIMIT
