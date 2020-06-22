@@ -68,6 +68,17 @@ Installed in /usr/local/sbin an can be run as user `zimbra`:
     zmprov grr global usr testadmin@example.com adminConsoleClientUploadRights
     zmprov fc all
 
+### Uninstallation
+
+To uninstall the zimlet just remove these folders:
+
+```bash
+rm -Rf /opt/zimbra/zimlets-deployed/_dev/tk_barrydegraaff_sharetoolkit_client
+rm -Rf /opt/zimbra/lib/ext/ShareToolkit
+su - zimbra -c "zmzimletctl undeploy tk_barrydegraaff_sharetoolkit_admin"
+su - zimbra -c "zmmailboxdctl restart"
+```
+
 ### License
 
 Copyright (C) 2015-2020  Barry de Graaff [Zeta Alliance](https://zetalliance.org/) and the _addSendAsOrSendOboAddresses patch by Michele [Olivo ZeXtras](https://www.zextras.com)
