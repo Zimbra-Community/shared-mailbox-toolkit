@@ -66,12 +66,18 @@ PERMISSIONS="rwixd"
 echo "Setting the default permissions: $PERMISSIONS" 
 fi
 
+# zmprov instructions on subscriber account
 PROFFILE="$(mktemp /tmp/subzim-prof.XXXXXXXX.txt)"
+# Sharer's instructions
 BOXMFILE="$(mktemp /tmp/subzim-boxm.XXXXXXXX.txt)"
+# Subscriber instructions
 BOXSFILE="$(mktemp /tmp/subzim-boxs.XXXXXXXX.txt)"
+# Persona creation instructions
+BOXPFILE="$(mktemp /tmp/subzim-boxp.XXXXXXXX.txt)"
 
 echo "" > "${BOXMFILE}"
 echo "" > "${BOXSFILE}"
+echo "" > "${BOXPFILE}"
 echo "" > "${PROFFILE}"
 
 echo "mfg / account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
@@ -81,22 +87,26 @@ echo "mfg /Sent account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
 echo "mfg /Junk account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
 echo "cm /$MAILBOX $MAILBOX /" >> "${BOXSFILE}"
 
+/opt/zimbra/bin/zmmailbox -z -m $MAILBOX < "${BOXMFILE}"
+/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER < "${BOXSFILE}"
+
 if [[ "$DO_PERSONAS" == 'N' || "$DO_PERSONAS" == 'n' ]];
 then
    echo "Persona creation/deletion skipped per user request."
 else
+   # Get mountpoint id to be used in replies
+   MOUNTPOINTID=`/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER getAllFolders | grep /$MAILBOX | awk '{print $1}'`
    NAME=`/opt/zimbra/bin/zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
    echo "grr account $MAILBOX usr $SUBSCRIBER sendAs" >> "${PROFFILE}"
    echo "deleteIdentity $SUBSCRIBER $PERSONA" >> "${PROFFILE}"
-   echo "createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay \"$NAME\"" >> "${PROFFILE}"
-   echo "dofrl \"$PERSONA.sent\"" >> "${BOXSFILE}"
-   echo "aofrl \"$PERSONA.sent\" active any address \"from\" all contains \"$MAILBOX\" fileinto \"$MAILBOX/Sent\" stop"  >> "${BOXSFILE}"
+   echo "createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay \"$NAME\" zimbraPrefWhenInFoldersEnabled TRUE zimbraPrefWhenInFolderIds $MOUNTPOINTID" >> "${PROFFILE}"
+   echo "dofrl \"$PERSONA.sent\"" >> "${BOXPFILE}"
+   echo "aofrl \"$PERSONA.sent\" active any address \"from\" all contains \"$MAILBOX\" fileinto \"$MAILBOX/Sent\" stop"  >> "${BOXPFILE}"
+   /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER < "${BOXPFILE}"
+   /opt/zimbra/bin/zmprov < "${PROFFILE}"
 fi
-
-/opt/zimbra/bin/zmmailbox -z -m $MAILBOX < "${BOXMFILE}"
-/opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER < "${BOXSFILE}"
-/opt/zimbra/bin/zmprov < "${PROFFILE}"
 
 rm -f "${BOXMFILE}"
 rm -f "${BOXSFILE}"
+rm -f "${BOXPFILE}"
 rm -f "${PROFFILE}"
