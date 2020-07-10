@@ -81,6 +81,10 @@ echo "" > "${BOXPFILE}"
 echo "" > "${PROFFILE}"
 
 echo "mfg / account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
+echo "mfg /Inbox account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
+echo "mfg /Drafts account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
+echo "mfg /Sent account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
+echo "mfg /Junk account $SUBSCRIBER $PERMISSIONS" >> "${BOXMFILE}"
 echo "cm /$MAILBOX $MAILBOX /" >> "${BOXSFILE}"
 
 /opt/zimbra/bin/zmmailbox -z -m $MAILBOX < "${BOXMFILE}"
