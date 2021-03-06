@@ -5,8 +5,6 @@ If you find Zimbra Shared Mailbox Toolkit useful and want to support its continu
 - PayPal: info@barrydegraaff.tk
 - Bank transfer: IBAN NL55ABNA0623226413 ; BIC ABNANL2A
 
-Demo video: https://youtu.be/8dzVqPENaBk
-
 Do you have generic mailboxes for you sales department, helpdesk or info@yourcompany.com, use Zimbra Shared Mailbox Toolkit to 
 share those mailboxes with your staff. For long time Zimbra users: this toolkit is meant to bring back family mailboxes to Zimbra 8+.
 
@@ -81,7 +79,7 @@ su - zimbra -c "zmmailboxdctl restart"
 
 ### License
 
-Copyright (C) 2015-2020  Barry de Graaff [Zeta Alliance](https://zetalliance.org/) and the _addSendAsOrSendOboAddresses patch by Michele [Olivo ZeXtras](https://www.zextras.com)
+Copyright (C) 2015-2021  Barry de Graaff [Zeta Alliance](https://zetalliance.org/) and the _addSendAsOrSendOboAddresses patch by Michele [Olivo ZeXtras](https://www.zextras.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
