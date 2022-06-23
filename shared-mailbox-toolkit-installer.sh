@@ -70,7 +70,7 @@ TMPFOLDER="$(mktemp -d /tmp/shared-mailbox-toolkit-installer.XXXXXXXX)"
 if ! git remote -v | grep /shared-mailbox-toolkit.git; then
   echo "Download Shared Mailbox Toolkit to $TMPFOLDER"
   cd $TMPFOLDER
-  git clone --depth=1 git://github.com/Zimbra-Community/shared-mailbox-toolkit
+  git clone --depth=1 https://github.com/Zimbra-Community/shared-mailbox-toolkit
   cd shared-mailbox-toolkit
 fi
 
