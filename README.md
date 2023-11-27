@@ -56,9 +56,20 @@ Installed in /usr/local/sbin an can be run as user `zimbra`:
 
 ### Enable the Admin Zimlet for delegated admins
 
+***Please note that the rights implementation for Shared Mailbox Toolkit is a (dirty) UI hack, the back-end does not see the difference between a Global Administrator and a Delegated Administrator!*** Setting these rights is merely a work-around to show the menu for delegated admins. _It is not a security feature!_.
+
     zmprov ma testadmin@example.com +zimbraAdminConsoleUIComponents zimbraClientUploadView
+    zmprov ma testadmin@example.com +zimbraAdminConsoleUIComponents softwareUpdatesView
     zmprov grr global usr testadmin@example.com adminConsoleClientUploadRights
     zmprov fc all
+
+Explainer:
+Historically this Zimlet relied on the rights for Client Uploader, but this is since removed from Zimbra, while still optional, it's installation is not recommended nor required for Shared Mailbox Toolkit. Since Shared Mailbox Toolkit does not implement anything to show the Tools and Migration menu, you need to give the delegated admin View rights for at least one other item in this menu. For this you can assign _softwareUpdatesView_ without additional rights assigned, the Software Updates feature is not usable, shows up with all blank values and disable actions.
+
+To create a delegated admin from scratch see: 
+- https://blog.zimbra.com/2023/05/discover-zimbra-10s-new-delegated-admin-wizard/
+- https://blog.zimbra.com/2021/11/zimbra-skillz-create-zimbra-delegated-administrators/
+- https://github.com/Zimbra-Community/zimbra-tools/blob/master/delegate-admin
 
 ### Uninstallation
 

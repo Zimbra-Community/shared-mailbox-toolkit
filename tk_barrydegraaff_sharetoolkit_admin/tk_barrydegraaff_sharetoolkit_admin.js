@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2014-2018  Barry de Graaff
+Copyright (C) 2014-2023  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ if(appNewUI && ZaSettings){
     ZaShareToolkit.TreeModifier = function (tree) {
         var overviewPanelController = this ;
         if (!overviewPanelController) throw new Exception("ZaShareToolkit.TreeModifier: Overview Panel Controller is not set.");
-        if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.Client_UPLOAD_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        if(ZaSettings.ENABLED_UI_COMPONENTS['zimbraClientUploadView'] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
             var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_toolMig]);
 
             var ti = new ZaTreeItemData({

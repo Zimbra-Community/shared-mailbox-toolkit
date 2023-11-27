@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2014-2018  Barry de Graaff
+Copyright (C) 2014-2023  Barry de Graaff
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 -->
-<zimlet name="tk_barrydegraaff_sharetoolkit_admin" version="0.5.4" label="Share Toolkit" description="Share Toolkit" extension="true">
+<zimlet name="tk_barrydegraaff_sharetoolkit_admin" version="0.5.5" label="Share Toolkit" description="Share Toolkit" extension="true">
     <include>tk_barrydegraaff_sharetoolkit_admin.js</include>
     <include>ZaShareToolkitViewController.js</include>
     <include>ZaShareToolkitTab.js</include>
