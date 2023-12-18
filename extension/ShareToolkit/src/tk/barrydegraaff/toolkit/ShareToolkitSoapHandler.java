@@ -22,6 +22,8 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AuthToken;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -36,6 +38,9 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
         try {
 
             ZimbraSoapContext zsc = getZimbraSoapContext(context);
+            AuthToken authToken = zsc.getAuthToken();
+            Account acct = authToken.getAccount();
+
             Element response = zsc.createElement(
                     "ShareToolkitResponse"
             );
@@ -43,10 +48,26 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
 
             switch (request.getAttribute("action")) {
                 case "getAccounts":
-                    shareToolkitResult.setText(this.runCommand("/usr/local/sbin/acctalias", "", "", "", ""));
+                    if (acct.isIsAdminAccount()) {
+                        //isIsAdminAccount: is Global Admin
+                        shareToolkitResult.setText(this.runCommand("/usr/local/sbin/acctalias", "", "", "", ""));
+                    } else {
+                        //give this admin only access to email address in the same domain as the admin account
+                        shareToolkitResult.setText(this.runCommand("/usr/local/sbin/acctalias", extractDomain(acct.getName()), "", "", ""));
+                    }
                     break;
                 case "createShare":
                 case "removeShare":
+                    //In case a delegated admin account is used, only allow operation on accounts in the same domain.
+                    if (!acct.isIsAdminAccount()) {
+                        final String adminDomain = extractDomain(acct.getName());
+                        final String accountADomain = extractDomain(request.getAttribute("accounta"));
+                        final String accountBDomain = extractDomain(request.getAttribute("accountb"));
+                        if (!areStringsEqual(adminDomain, accountADomain, accountBDomain)) {
+                            shareToolkitResult.setText("You are not authorized for this domain.");
+                            return response;
+                        }
+                    }
                     if ((this.validate(request.getAttribute("accountb"))) && (this.validate(request.getAttribute("accounta")))) {
                         final String skipPersonaCreation;
                         if ("true".equals(request.getAttribute("skipPersonaCreation"))) {
@@ -61,24 +82,32 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
                                 ("rwix".equals(request.getAttribute("permissions"))) ||
                                 ("rwixd".equals(request.getAttribute("permissions"))) ||
                                 ("rwixda".equals(request.getAttribute("permissions"))) ||
-                                ("none".equals(request.getAttribute("permissions"))))
-                        {
+                                ("none".equals(request.getAttribute("permissions")))) {
                             permissions = request.getAttribute("permissions");
                         } else {
                             permissions = "rwixd";
                         }
 
-                            if (request.getAttribute("action").equals("createShare")) {
-                                this.runCommand("/usr/local/sbin/subzim", request.getAttribute("accountb"), request.getAttribute("accounta"), skipPersonaCreation, permissions);
-                            } else if (request.getAttribute("action").equals("removeShare")) {
-                                this.runCommand("/usr/local/sbin/unsubzim", request.getAttribute("accountb"), request.getAttribute("accounta"), skipPersonaCreation, permissions);
-                            }
+                        if (request.getAttribute("action").equals("createShare")) {
+                            this.runCommand("/usr/local/sbin/subzim", request.getAttribute("accountb"), request.getAttribute("accounta"), skipPersonaCreation, permissions);
+                        } else if (request.getAttribute("action").equals("removeShare")) {
+                            this.runCommand("/usr/local/sbin/unsubzim", request.getAttribute("accountb"), request.getAttribute("accounta"), skipPersonaCreation, permissions);
+                        }
 
                         shareToolkitResult.setText("");
                     } else {
                         shareToolkitResult.setText("Invalid email address specified.");
                     }
                 case "createPersonas":
+                    //In case a delegated admin account is used, only allow operation on accounts in the same domain.
+                    if (!acct.isIsAdminAccount()) {
+                        final String adminDomain = extractDomain(acct.getName());
+                        final String accountADomain = extractDomain(request.getAttribute("accounta"));
+                        if (!areStringsEqual(adminDomain, accountADomain, accountADomain)) {
+                            shareToolkitResult.setText("You are not authorized for this domain.");
+                            return response;
+                        }
+                    }
                     if (this.validate(request.getAttribute("accounta"))) {
                         this.runCommand("/usr/local/sbin/personagen", request.getAttribute("accounta"), "", "", "");
                         shareToolkitResult.setText("");
@@ -90,12 +119,34 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
             return response;
 
         } catch (
-                Exception e)
-
-        {
+                Exception e) {
             throw ServiceException.FAILURE("ShareToolkitSoapHandler ServiceException ", e);
         }
 
+    }
+
+    /*
+    areStringsEqual has been written by ChatGPT
+    * */
+    public static boolean areStringsEqual(String str1, String str2, String str3) {
+        // Using the equals method to compare strings for equality
+        return str1.equals(str2) && str2.equals(str3);
+    }
+
+    /*
+    extractDomain has been written by ChatGPT
+    * */
+    public static String extractDomain(String emailAddress) {
+        // Split the email address into local part and domain part
+        String[] parts = emailAddress.split("@");
+
+        // Check if the email address is valid
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid email address format");
+        }
+
+        // Return the domain part
+        return parts[1];
     }
 
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
@@ -125,9 +176,7 @@ public class ShareToolkitSoapHandler extends DocumentHandler {
             return cmdResult;
 
         } catch (
-                Exception e)
-
-        {
+                Exception e) {
             throw ServiceException.FAILURE("ShareToolkitSoapHandler runCommand exception", e);
         }
     }

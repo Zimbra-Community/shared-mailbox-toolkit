@@ -28,4 +28,4 @@ fi
 
 # show a list of accounts auto-completion (or something else)
 
-/opt/zimbra/bin/zmprov -l gaa | sort
+/opt/zimbra/bin/zmprov -l gaa $1 | sort

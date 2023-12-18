@@ -56,7 +56,7 @@ Installed in /usr/local/sbin an can be run as user `zimbra`:
 
 ### Enable the Admin Zimlet for delegated admins
 
-***Please note that the rights implementation for Shared Mailbox Toolkit is a (dirty) UI hack, the back-end does not see the difference between a Global Administrator and a Delegated Administrator!*** Setting these rights is merely a work-around to show the menu for delegated admins. _It is not a security feature!_.
+***As of version 0.6 delegated administrators can only manage accounts in the same domain, so if the delegated administrators is myadmin@example.com, this admin account can only perform actions on example.com accounts. Global administrators can perform actions on all accounts regardless of domain. In older versions of this Zimlet delegated administrators had the same rights as global administrators.***. 
 
     zmprov ma testadmin@example.com +zimbraAdminConsoleUIComponents zimbraClientUploadView
     zmprov ma testadmin@example.com +zimbraAdminConsoleUIComponents softwareUpdatesView
