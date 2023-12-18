@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2014-2020  Barry de Graaff
+# Copyright (C) 2014-2023  Barry de Graaff
 # 
 # Bugs and feedback: https://github.com/Zimbra-Community/shared-mailbox-toolkit/issues
 # 
