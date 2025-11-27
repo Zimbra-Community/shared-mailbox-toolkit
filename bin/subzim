@@ -99,7 +99,7 @@ else
    NAME=`/opt/zimbra/bin/zmprov ga $MAILBOX displayName|egrep '^displayName:'|sed -e 's/^displayName: //'`
    echo "grr account $MAILBOX usr $SUBSCRIBER sendAs" >> "${PROFFILE}"
    echo "deleteIdentity $SUBSCRIBER $PERSONA" >> "${PROFFILE}"
-   echo "createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay \"$NAME\" zimbraPrefWhenInFoldersEnabled TRUE zimbraPrefWhenInFolderIds $MOUNTPOINTID" >> "${PROFFILE}"
+   echo "createIdentity $SUBSCRIBER $PERSONA zimbraPrefFromAddress $MAILBOX zimbraPrefWhenSentToAddresses $MAILBOX zimbraPrefWhenSentToEnabled TRUE zimbraPrefFromDisplay \"$NAME\" zimbraPrefWhenInFoldersEnabled TRUE zimbraPrefFromAddressType sendAs zimbraPrefWhenInFolderIds $MOUNTPOINTID" >> "${PROFFILE}"
    echo "dofrl \"$PERSONA.sent\"" >> "${BOXPFILE}"
    echo "aofrl \"$PERSONA.sent\" active any address \"from\" all contains \"$MAILBOX\" fileinto \"$MAILBOX/Sent\" mark read stop"  >> "${BOXPFILE}"
    /opt/zimbra/bin/zmmailbox -z -m $SUBSCRIBER < "${BOXPFILE}"
